@@ -7,714 +7,145 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #F5F0E8;
-    --ivory: #FDFAF4;
-    --navy: #1C2B4A;
-    --gold: #C9A84C;
-    --gold-light: #E8D5A0;
-    --burgundy: #7D2B3E;
-    --sage: #6B7F6A;
-    --text: #2C2416;
-    --text-light: #6B5F4E;
-    --border: rgba(201,168,76,0.3);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Jost', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 10% 20%, rgba(201,168,76,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 90% 80%, rgba(125,43,62,0.06) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* Decorative corner flourishes */
-  body::after {
-    content: '❧';
-    position: fixed;
-    bottom: 20px;
-    right: 28px;
-    font-size: 2rem;
-    color: var(--gold);
-    opacity: 0.25;
-    pointer-events: none;
-  }
-
-  /* ── HEADER ── */
-  header {
-    text-align: center;
-    padding: 2.5rem 2rem 1.5rem;
-    position: relative;
-    z-index: 1;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .header-ornament {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    color: var(--gold);
-    font-size: 0.85rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    margin-bottom: 0.4rem;
-    opacity: 0.9;
-  }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3rem);
-    color: var(--navy);
-    font-weight: 700;
-    letter-spacing: -0.01em;
-  }
-
-  h1 em {
-    font-style: italic;
-    color: var(--burgundy);
-  }
-
-  .subtitle {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    color: var(--text-light);
-    margin-top: 0.3rem;
-    letter-spacing: 0.08em;
-  }
-
-  /* ── PROGRESS BAR ── */
-  .progress-section {
-    max-width: 700px;
-    margin: 1.5rem auto 0;
-    padding: 0 1.5rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-light);
-    margin-bottom: 0.5rem;
-  }
-
-  .progress-bar-outer {
-    height: 6px;
-    background: rgba(201,168,76,0.2);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .progress-bar-inner {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold), var(--burgundy));
-    border-radius: 3px;
-    transition: width 0.5s ease;
-  }
-
-  .stats-row {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 0.8rem;
-  }
-
-  .stat {
-    text-align: center;
-  }
-
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    color: var(--navy);
-    display: block;
-  }
-
-  .stat-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-light);
-  }
-
-  /* ── NAV TABS ── */
-  nav {
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    max-width: 600px;
-    margin: 1.8rem auto 0;
-    padding: 0 1.5rem;
-    position: relative;
-    z-index: 1;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .tab-btn {
-    flex: 1;
-    padding: 0.75rem 0.5rem;
-    background: transparent;
-    border: none;
-    border-right: 1px solid var(--border);
-    font-family: 'Jost', sans-serif;
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-light);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .tab-btn:last-child { border-right: none; }
-
-  .tab-btn.active {
-    background: var(--navy);
-    color: var(--gold-light);
-  }
-
-  .tab-btn:not(.active):hover {
-    background: rgba(28,43,74,0.05);
-    color: var(--navy);
-  }
-
-  /* ── MAIN CONTENT ── */
-  main {
-    max-width: 700px;
-    margin: 2rem auto;
-    padding: 0 1.5rem 4rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .panel { display: none; }
-  .panel.active { display: block; }
-
-  /* ── FLASHCARD ── */
-  .flashcard-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .category-select {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    padding: 0.45rem 0.9rem;
-    border: 1px solid var(--border);
-    background: var(--ivory);
-    color: var(--navy);
-    border-radius: 2px;
-    cursor: pointer;
-    outline: none;
-  }
-
-  .fc-counter {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    color: var(--text-light);
-    font-size: 0.95rem;
-  }
-
-  .flashcard-scene {
-    perspective: 1000px;
-    cursor: pointer;
-    margin-bottom: 1.5rem;
-  }
-
-  .flashcard {
-    width: 100%;
-    min-height: 260px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .flashcard.flipped { transform: rotateY(180deg); }
-
-  .fc-face {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    background: var(--ivory);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2.5rem;
-    box-shadow: 0 4px 30px rgba(28,43,74,0.08), inset 0 0 0 6px var(--cream);
-  }
-
-  .fc-back {
-    transform: rotateY(180deg);
-    background: var(--navy);
-    box-shadow: 0 4px 30px rgba(28,43,74,0.2), inset 0 0 0 6px rgba(255,255,255,0.05);
-  }
-
-  .fc-hint {
-    position: absolute;
-    top: 1rem;
-    right: 1.2rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-light);
-    opacity: 0.6;
-  }
-
-  .fc-back .fc-hint { color: rgba(255,255,255,0.4); }
-
-  .fc-category {
-    font-size: 0.68rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-  }
-
-  .fc-word {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 6vw, 3.2rem);
-    color: var(--navy);
-    text-align: center;
-    line-height: 1.1;
-  }
-
-  .fc-back .fc-word { color: var(--gold-light); }
-
-  .fc-pronunciation {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.1rem;
-    color: var(--text-light);
-    margin-top: 0.4rem;
-  }
-
-  .fc-back .fc-pronunciation { color: rgba(255,255,255,0.5); }
-
-  .fc-translation {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 300;
-    color: rgba(255,255,255,0.85);
-    margin-top: 0.3rem;
-    text-align: center;
-  }
-
-  .fc-example {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.95rem;
-    color: rgba(255,255,255,0.5);
-    margin-top: 1rem;
-    text-align: center;
-    max-width: 300px;
-  }
-
-  .audio-btn {
-    margin-top: 1.2rem;
-    background: rgba(201,168,76,0.15);
-    border: 1px solid rgba(201,168,76,0.4);
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: var(--gold);
-    font-size: 1.1rem;
-  }
-
-  .audio-btn:hover { background: rgba(201,168,76,0.3); transform: scale(1.05); }
-
-  .fc-nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.65rem 1.4rem;
-    border-radius: 2px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-primary {
-    background: var(--navy);
-    color: var(--gold-light);
-    border-color: var(--navy);
-  }
-
-  .btn-primary:hover { background: var(--burgundy); border-color: var(--burgundy); }
-
-  .btn-outline {
-    background: transparent;
-    color: var(--navy);
-    border-color: var(--border);
-  }
-
-  .btn-outline:hover { border-color: var(--navy); background: rgba(28,43,74,0.05); }
-
-  .btn-success {
-    background: var(--sage);
-    color: white;
-    border-color: var(--sage);
-  }
-
-  .btn-danger {
-    background: var(--burgundy);
-    color: white;
-    border-color: var(--burgundy);
-  }
-
-  /* ── SENTENCES ── */
-  .sentences-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .sentence-card {
-    border: 1px solid var(--border);
-    background: var(--ivory);
-    border-radius: 3px;
-    padding: 1.4rem 1.6rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 1.2rem;
-    transition: box-shadow 0.2s;
-  }
-
-  .sentence-card:hover { box-shadow: 0 4px 20px rgba(28,43,74,0.08); }
-
-  .sentence-icon {
-    font-size: 1.4rem;
-    flex-shrink: 0;
-    margin-top: 0.1rem;
-  }
-
-  .sentence-content { flex: 1; }
-
-  .sentence-fr {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    color: var(--navy);
-    margin-bottom: 0.3rem;
-  }
-
-  .sentence-en {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    color: var(--text-light);
-    font-size: 0.95rem;
-  }
-
-  .sentence-situation {
-    font-size: 0.68rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.5rem;
-  }
-
-  .sentence-audio {
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--gold);
-    flex-shrink: 0;
-    transition: all 0.2s;
-    font-size: 0.9rem;
-  }
-
-  .sentence-audio:hover { background: rgba(201,168,76,0.15); }
-
-  .sentences-filter {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.2rem;
-  }
-
-  .filter-chip {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.35rem 0.85rem;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    background: transparent;
-    color: var(--text-light);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .filter-chip.active, .filter-chip:hover {
-    background: var(--navy);
-    color: var(--gold-light);
-    border-color: var(--navy);
-  }
-
-  /* ── QUIZ ── */
-  .quiz-question {
-    border: 1px solid var(--border);
-    background: var(--ivory);
-    border-radius: 3px;
-    padding: 2rem;
-    margin-bottom: 1.2rem;
-    text-align: center;
-  }
-
-  .quiz-q-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-  }
-
-  .quiz-q-word {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
-    color: var(--navy);
-    margin-bottom: 0.3rem;
-  }
-
-  .quiz-q-type {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    color: var(--text-light);
-    font-size: 0.95rem;
-  }
-
-  .quiz-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .quiz-option {
-    padding: 0.9rem 1rem;
-    border: 1px solid var(--border);
-    background: var(--ivory);
-    border-radius: 3px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    color: var(--navy);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-  }
-
-  .quiz-option:hover:not(:disabled) { border-color: var(--navy); background: rgba(28,43,74,0.04); }
-  .quiz-option.correct { background: rgba(107,127,106,0.15); border-color: var(--sage); color: var(--sage); }
-  .quiz-option.wrong { background: rgba(125,43,62,0.1); border-color: var(--burgundy); color: var(--burgundy); }
-  .quiz-option:disabled { cursor: default; }
-
-  .quiz-feedback {
-    text-align: center;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.1rem;
-    min-height: 1.5rem;
-    margin-bottom: 1rem;
-    transition: all 0.3s;
-  }
-
-  .quiz-feedback.correct { color: var(--sage); }
-  .quiz-feedback.wrong { color: var(--burgundy); }
-
-  .quiz-score-display {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    padding: 1.2rem;
-    border: 1px solid var(--border);
-    background: var(--ivory);
-    border-radius: 3px;
-    margin-bottom: 1.2rem;
-  }
-
-  /* ── PROGRESS ── */
-  .progress-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .progress-card {
-    border: 1px solid var(--border);
-    background: var(--ivory);
-    border-radius: 3px;
-    padding: 1.4rem;
-    text-align: center;
-  }
-
-  .progress-card-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
-
-  .progress-card-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: var(--navy);
-    display: block;
-  }
-
-  .progress-card-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-light);
-  }
-
-  .word-mastery-list {
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .word-mastery-header {
-    background: var(--navy);
-    color: var(--gold-light);
-    padding: 0.75rem 1.2rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 1rem;
-  }
-
-  .word-mastery-item {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 1rem;
-    padding: 0.7rem 1.2rem;
-    border-bottom: 1px solid var(--border);
-    align-items: center;
-    background: var(--ivory);
-    font-size: 0.9rem;
-  }
-
-  .word-mastery-item:last-child { border-bottom: none; }
-
-  .mastery-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .mastery-0 { background: #ddd; }
-  .mastery-1 { background: var(--gold); }
-  .mastery-2 { background: var(--sage); }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--navy);
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .divider {
-    text-align: center;
-    color: var(--gold);
-    font-size: 1.2rem;
-    letter-spacing: 0.5em;
-    margin: 1.5rem 0;
-    opacity: 0.4;
-  }
-
-  /* Flashcard min-height fix for absolute children */
-  .flashcard-scene { min-height: 260px; }
-  .flashcard { min-height: 260px; }
-
-  @media (max-width: 500px) {
-    .quiz-options { grid-template-columns: 1fr; }
-    .stats-row { gap: 1rem; }
-  }
+    --cream:#F5F0E8;--ivory:#FDFAF4;--navy:#1C2B4A;--gold:#C9A84C;
+    --gold-light:#E8D5A0;--burgundy:#7D2B3E;--sage:#6B7F6A;
+    --text:#2C2416;--text-light:#6B5F4E;--border:rgba(201,168,76,0.3);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;position:relative;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 10% 20%,rgba(201,168,76,0.08) 0%,transparent 50%),radial-gradient(ellipse at 90% 80%,rgba(125,43,62,0.06) 0%,transparent 50%);pointer-events:none;z-index:0;}
+  body::after{content:'❧';position:fixed;bottom:20px;right:28px;font-size:2rem;color:var(--gold);opacity:0.25;pointer-events:none;}
+  header{text-align:center;padding:2rem 2rem 1.2rem;position:relative;z-index:1;border-bottom:1px solid var(--border);}
+  .header-ornament{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:0.85rem;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:0.4rem;opacity:0.9;}
+  h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,3rem);color:var(--navy);font-weight:700;}
+  h1 em{font-style:italic;color:var(--burgundy);}
+  .subtitle{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text-light);margin-top:0.3rem;letter-spacing:0.08em;}
+  .save-indicator{font-size:0.7rem;letter-spacing:0.1em;color:var(--sage);margin-top:0.3rem;opacity:0;transition:opacity 0.5s;}
+  .save-indicator.show{opacity:1;}
+  .progress-section{max-width:700px;margin:1.2rem auto 0;padding:0 1.5rem;position:relative;z-index:1;}
+  .progress-label{display:flex;justify-content:space-between;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.5rem;}
+  .progress-bar-outer{height:6px;background:rgba(201,168,76,0.2);border-radius:3px;overflow:hidden;}
+  .progress-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold),var(--burgundy));border-radius:3px;transition:width 0.5s ease;}
+  .stats-row{display:flex;justify-content:center;gap:1.5rem;margin-top:0.8rem;flex-wrap:wrap;}
+  .stat{text-align:center;}
+  .stat-num{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--navy);display:block;}
+  .stat-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);}
+  nav{display:flex;justify-content:center;max-width:600px;margin:1.5rem auto 0;padding:0 1.5rem;position:relative;z-index:1;border:1px solid var(--border);border-radius:2px;overflow:hidden;}
+  .tab-btn{flex:1;padding:0.75rem 0.5rem;background:transparent;border:none;border-right:1px solid var(--border);font-family:'Jost',sans-serif;font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);cursor:pointer;transition:all 0.2s;}
+  .tab-btn:last-child{border-right:none;}
+  .tab-btn.active{background:var(--navy);color:var(--gold-light);}
+  .tab-btn:not(.active):hover{background:rgba(28,43,74,0.05);color:var(--navy);}
+  main{max-width:700px;margin:1.5rem auto;padding:0 1.5rem 4rem;position:relative;z-index:1;}
+  .panel{display:none;}.panel.active{display:block;}
+  .flashcard-controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;}
+  .category-select{font-family:'Jost',sans-serif;font-size:0.78rem;padding:0.45rem 0.9rem;border:1px solid var(--border);background:var(--ivory);color:var(--navy);border-radius:2px;cursor:pointer;outline:none;}
+  .fc-counter{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-light);font-size:0.95rem;}
+  .flashcard-scene{perspective:1000px;cursor:pointer;margin-bottom:1.5rem;min-height:260px;}
+  .flashcard{width:100%;min-height:260px;position:relative;transform-style:preserve-3d;transition:transform 0.55s cubic-bezier(0.4,0,0.2,1);}
+  .flashcard.flipped{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--border);border-radius:3px;background:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;box-shadow:0 4px 30px rgba(28,43,74,0.08),inset 0 0 0 6px var(--cream);}
+  .fc-back{transform:rotateY(180deg);background:var(--navy);box-shadow:0 4px 30px rgba(28,43,74,0.2),inset 0 0 0 6px rgba(255,255,255,0.05);}
+  .fc-hint{position:absolute;top:1rem;right:1.2rem;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light);opacity:0.6;}
+  .fc-back .fc-hint{color:rgba(255,255,255,0.4);}
+  .fc-srs-info{position:absolute;top:1rem;left:1.2rem;font-size:0.68rem;color:var(--gold);opacity:0.8;}
+  .fc-category{font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;}
+  .fc-word{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3rem);color:var(--navy);text-align:center;line-height:1.1;}
+  .fc-back .fc-word{color:var(--gold-light);}
+  .fc-pronunciation{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--text-light);margin-top:0.4rem;}
+  .fc-back .fc-pronunciation{color:rgba(255,255,255,0.5);}
+  .fc-translation{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:rgba(255,255,255,0.85);margin-top:0.3rem;text-align:center;}
+  .fc-example{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.92rem;color:rgba(255,255,255,0.5);margin-top:0.8rem;text-align:center;max-width:300px;}
+  .audio-btn{margin-top:1rem;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;color:var(--gold);font-size:1.1rem;}
+  .audio-btn:hover{background:rgba(201,168,76,0.3);transform:scale(1.05);}
+  .fc-nav{display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:1rem;flex-wrap:wrap;}
+  .btn{font-family:'Jost',sans-serif;font-size:0.73rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;padding:0.6rem 1rem;border-radius:2px;border:1px solid transparent;cursor:pointer;transition:all 0.2s;}
+  .btn-primary{background:var(--navy);color:var(--gold-light);border-color:var(--navy);}
+  .btn-primary:hover{background:var(--burgundy);border-color:var(--burgundy);}
+  .btn-outline{background:transparent;color:var(--navy);border-color:var(--border);}
+  .btn-outline:hover{border-color:var(--navy);background:rgba(28,43,74,0.05);}
+  .btn-success{background:var(--sage);color:white;border-color:var(--sage);}
+  .btn-danger{background:var(--burgundy);color:white;border-color:var(--burgundy);}
+  .btn-srs{background:rgba(201,168,76,0.15);color:var(--navy);border-color:var(--gold);}
+  .srs-mode-bar{background:rgba(125,43,62,0.08);border:1px solid rgba(125,43,62,0.2);border-radius:3px;padding:0.6rem 1rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;color:var(--burgundy);}
+  .srs-hint{text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:0.6rem;font-style:italic;}
+  .sentences-grid{display:flex;flex-direction:column;gap:1rem;}
+  .sentence-card{border:1px solid var(--border);background:var(--ivory);border-radius:3px;padding:1.2rem 1.4rem;display:flex;align-items:flex-start;gap:1rem;transition:box-shadow 0.2s;}
+  .sentence-card:hover{box-shadow:0 4px 20px rgba(28,43,74,0.08);}
+  .sentence-icon{font-size:1.3rem;flex-shrink:0;margin-top:0.1rem;}
+  .sentence-content{flex:1;}
+  .sentence-fr{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:0.3rem;}
+  .sentence-en{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-light);font-size:0.92rem;}
+  .sentence-situation{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;}
+  .sentence-audio{background:none;border:1px solid var(--border);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gold);flex-shrink:0;transition:all 0.2s;font-size:0.9rem;}
+  .sentence-audio:hover{background:rgba(201,168,76,0.15);}
+  .sentences-filter{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+  .filter-chip{font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.35rem 0.85rem;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text-light);cursor:pointer;transition:all 0.2s;}
+  .filter-chip.active,.filter-chip:hover{background:var(--navy);color:var(--gold-light);border-color:var(--navy);}
+  .quiz-question{border:1px solid var(--border);background:var(--ivory);border-radius:3px;padding:1.8rem;margin-bottom:1.2rem;text-align:center;}
+  .quiz-q-label{font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+  .quiz-q-word{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);color:var(--navy);margin-bottom:0.3rem;}
+  .quiz-q-type{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-light);font-size:0.92rem;}
+  .quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.2rem;}
+  .quiz-option{padding:0.85rem 1rem;border:1px solid var(--border);background:var(--ivory);border-radius:3px;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--navy);cursor:pointer;transition:all 0.2s;text-align:center;}
+  .quiz-option:hover:not(:disabled){border-color:var(--navy);background:rgba(28,43,74,0.04);}
+  .quiz-option.correct{background:rgba(107,127,106,0.15);border-color:var(--sage);color:var(--sage);}
+  .quiz-option.wrong{background:rgba(125,43,62,0.1);border-color:var(--burgundy);color:var(--burgundy);}
+  .quiz-option:disabled{cursor:default;}
+  .quiz-feedback{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;min-height:1.5rem;margin-bottom:1rem;}
+  .quiz-feedback.correct{color:var(--sage);}.quiz-feedback.wrong{color:var(--burgundy);}
+  .quiz-score-display{display:flex;justify-content:center;gap:2rem;padding:1rem;border:1px solid var(--border);background:var(--ivory);border-radius:3px;margin-bottom:1.2rem;}
+  .progress-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;margin-bottom:1.5rem;}
+  .progress-card{border:1px solid var(--border);background:var(--ivory);border-radius:3px;padding:1.2rem;text-align:center;}
+  .progress-card-icon{font-size:1.5rem;margin-bottom:0.4rem;}
+  .progress-card-num{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--navy);display:block;}
+  .progress-card-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);}
+  .word-mastery-list{border:1px solid var(--border);border-radius:3px;overflow:hidden;max-height:420px;overflow-y:auto;}
+  .word-mastery-header{background:var(--navy);color:var(--gold-light);padding:0.75rem 1.2rem;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;display:grid;grid-template-columns:1fr 1fr auto auto;gap:0.5rem;position:sticky;top:0;}
+  .word-mastery-item{display:grid;grid-template-columns:1fr 1fr auto auto;gap:0.5rem;padding:0.6rem 1.2rem;border-bottom:1px solid var(--border);align-items:center;background:var(--ivory);font-size:0.85rem;}
+  .word-mastery-item:last-child{border-bottom:none;}
+  .mastery-dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .mastery-0{background:#ddd;}.mastery-1{background:var(--gold);}.mastery-2{background:var(--sage);}
+  .next-review{font-size:0.68rem;color:var(--text-light);white-space:nowrap;}
+  .next-review.due{color:var(--burgundy);font-weight:500;}
+  .section-title{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+  .divider{text-align:center;color:var(--gold);font-size:1.2rem;letter-spacing:0.5em;margin:1.2rem 0;opacity:0.4;}
+  .reset-btn{font-size:0.72rem;color:var(--burgundy);background:none;border:none;cursor:pointer;text-decoration:underline;letter-spacing:0.05em;}
+  @media(max-width:500px){.quiz-options{grid-template-columns:1fr;}.stats-row{gap:1rem;}}
 </style>
 </head>
 <body>
-
 <header>
   <div class="header-ornament">✦ &nbsp; Une belle aventure &nbsp; ✦</div>
   <h1>Parlez-Vous <em>Français</em> ?</h1>
   <p class="subtitle">An elegant journey into the French language</p>
+  <div class="save-indicator" id="saveIndicator">✓ Progress saved</div>
 </header>
 
 <div class="progress-section">
-  <div class="progress-label">
-    <span>Vocabulary Mastered</span>
-    <span id="progressPct">0%</span>
-  </div>
-  <div class="progress-bar-outer">
-    <div class="progress-bar-inner" id="progressBar" style="width:0%"></div>
-  </div>
+  <div class="progress-label"><span>Vocabulary Mastered</span><span id="progressPct">0%</span></div>
+  <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar" style="width:0%"></div></div>
   <div class="stats-row">
     <div class="stat"><span class="stat-num" id="statMastered">0</span><span class="stat-label">Mastered</span></div>
     <div class="stat"><span class="stat-num" id="statLearning">0</span><span class="stat-label">Learning</span></div>
+    <div class="stat"><span class="stat-num" id="statDue">0</span><span class="stat-label">Due Today</span></div>
     <div class="stat"><span class="stat-num" id="statQuizScore">0%</span><span class="stat-label">Quiz Score</span></div>
     <div class="stat"><span class="stat-num" id="statStreak">0</span><span class="stat-label">Streak</span></div>
   </div>
 </div>
 
 <nav>
-  <button class="tab-btn active" onclick="showTab('flashcards')">Flashcards</button>
-  <button class="tab-btn" onclick="showTab('sentences')">Phrases</button>
-  <button class="tab-btn" onclick="showTab('quiz')">Quiz</button>
-  <button class="tab-btn" onclick="showTab('progress')">Progress</button>
+  <button class="tab-btn active" onclick="showTab('flashcards',this)">Flashcards</button>
+  <button class="tab-btn" onclick="showTab('sentences',this)">Phrases</button>
+  <button class="tab-btn" onclick="showTab('quiz',this)">Quiz</button>
+  <button class="tab-btn" onclick="showTab('progress',this)">Progress</button>
 </nav>
 
 <main>
-
-  <!-- FLASHCARDS -->
   <div class="panel active" id="panel-flashcards">
+    <div id="srsModeBar" class="srs-mode-bar" style="display:none;">
+      🔁 Review Mode — <span id="srsDueCount">0</span> cards due
+      <button class="btn btn-outline" style="font-size:0.68rem;padding:0.3rem 0.7rem;" onclick="exitSrsMode()">Exit</button>
+    </div>
     <div class="flashcard-controls">
       <select class="category-select" id="categorySelect" onchange="filterCategory()">
         <option value="all">All Categories</option>
@@ -723,22 +154,26 @@
         <option value="Time">Time</option>
         <option value="People">People</option>
         <option value="Places">Places</option>
-        <option value="Food">Food & Drink</option>
+        <option value="Food">Food &amp; Drink</option>
         <option value="Actions">Actions</option>
         <option value="Descriptions">Descriptions</option>
+        <option value="Travel">Travel</option>
+        <option value="Health">Health</option>
+        <option value="Weather">Weather</option>
       </select>
-      <span class="fc-counter" id="fcCounter">Card 1 of 50</span>
+      <span class="fc-counter" id="fcCounter">Card 1 of 150</span>
+      <button class="btn btn-srs" onclick="startSrsMode()">Review Due</button>
       <button class="btn btn-outline" onclick="shuffleCards()">Shuffle</button>
     </div>
-
     <div class="flashcard-scene" onclick="flipCard()">
       <div class="flashcard" id="flashcard">
         <div class="fc-face fc-front">
           <span class="fc-hint">tap to reveal</span>
+          <div class="fc-srs-info" id="fcSrsInfo"></div>
           <div class="fc-category" id="fcCategory">Essentials</div>
           <div class="fc-word" id="fcFrench">bonjour</div>
           <div class="fc-pronunciation" id="fcPronunciation">/bɔ̃.ʒuʁ/</div>
-          <button class="audio-btn" onclick="event.stopPropagation(); speakWord()" title="Hear pronunciation">🔊</button>
+          <button class="audio-btn" onclick="event.stopPropagation();speakWord()">🔊</button>
         </div>
         <div class="fc-face fc-back">
           <span class="fc-hint">tap to flip back</span>
@@ -747,34 +182,36 @@
           <div class="fc-pronunciation" id="fcPronunciationBack">/bɔ̃.ʒuʁ/</div>
           <div class="fc-translation" id="fcExample">Bonjour, comment allez-vous ?</div>
           <div class="fc-example" id="fcExampleEn">Hello, how are you?</div>
-          <button class="audio-btn" onclick="event.stopPropagation(); speakWord()" title="Hear pronunciation" style="margin-top:0.8rem;">🔊</button>
+          <button class="audio-btn" onclick="event.stopPropagation();speakWord()" style="margin-top:0.8rem;">🔊</button>
         </div>
       </div>
     </div>
-
     <div class="fc-nav">
-      <button class="btn btn-outline" onclick="prevCard()">← Previous</button>
-      <button class="btn btn-danger" onclick="markCard(0)">Still Learning</button>
-      <button class="btn btn-success" onclick="markCard(2)">Mastered ✓</button>
-      <button class="btn btn-primary" onclick="nextCard()">Next →</button>
+      <button class="btn btn-outline" onclick="prevCard()">← Prev</button>
+      <button class="btn btn-danger" onclick="markCard(0)">Again</button>
+      <button class="btn btn-outline" onclick="markCard(1)">Hard</button>
+      <button class="btn btn-success" onclick="markCard(2)">Good ✓</button>
+      <button class="btn btn-primary" onclick="markCard(3)">Easy ⭐</button>
+      <button class="btn btn-outline" onclick="nextCard()">Next →</button>
     </div>
+    <p class="srs-hint">Again = review today · Hard = 1 day · Good = 3 days · Easy = 7 days</p>
   </div>
 
-  <!-- SENTENCES -->
   <div class="panel" id="panel-sentences">
-    <div class="sentences-filter" id="sentenceFilters">
-      <button class="filter-chip active" onclick="filterSentences('all', this)">All</button>
-      <button class="filter-chip" onclick="filterSentences('Greetings', this)">Greetings</button>
-      <button class="filter-chip" onclick="filterSentences('Dining', this)">Dining</button>
-      <button class="filter-chip" onclick="filterSentences('Shopping', this)">Shopping</button>
-      <button class="filter-chip" onclick="filterSentences('Directions', this)">Directions</button>
-      <button class="filter-chip" onclick="filterSentences('Emergencies', this)">Help</button>
-      <button class="filter-chip" onclick="filterSentences('Social', this)">Social</button>
+    <div class="sentences-filter">
+      <button class="filter-chip active" onclick="filterSentences('all',this)">All</button>
+      <button class="filter-chip" onclick="filterSentences('Greetings',this)">Greetings</button>
+      <button class="filter-chip" onclick="filterSentences('Dining',this)">Dining</button>
+      <button class="filter-chip" onclick="filterSentences('Shopping',this)">Shopping</button>
+      <button class="filter-chip" onclick="filterSentences('Directions',this)">Directions</button>
+      <button class="filter-chip" onclick="filterSentences('Emergencies',this)">Help</button>
+      <button class="filter-chip" onclick="filterSentences('Social',this)">Social</button>
+      <button class="filter-chip" onclick="filterSentences('Travel',this)">Travel</button>
+      <button class="filter-chip" onclick="filterSentences('Health',this)">Health</button>
     </div>
     <div class="sentences-grid" id="sentencesGrid"></div>
   </div>
 
-  <!-- QUIZ -->
   <div class="panel" id="panel-quiz">
     <div class="quiz-score-display">
       <div class="stat"><span class="stat-num" id="qCorrect">0</span><span class="stat-label">Correct</span></div>
@@ -788,278 +225,363 @@
     </div>
     <div class="quiz-options" id="quizOptions"></div>
     <div class="quiz-feedback" id="quizFeedback"></div>
-    <div style="text-align:center;">
+    <div style="text-align:center;display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;">
       <button class="btn btn-primary" id="nextQuizBtn" onclick="loadQuizQuestion()" style="display:none;">Next Question →</button>
       <button class="btn btn-outline" onclick="resetQuiz()">Reset Quiz</button>
     </div>
   </div>
 
-  <!-- PROGRESS -->
   <div class="panel" id="panel-progress">
     <div class="progress-cards">
-      <div class="progress-card">
-        <div class="progress-card-icon">⭐</div>
-        <span class="progress-card-num" id="pMastered">0</span>
-        <span class="progress-card-label">Words Mastered</span>
-      </div>
-      <div class="progress-card">
-        <div class="progress-card-icon">📖</div>
-        <span class="progress-card-num" id="pLearning">0</span>
-        <span class="progress-card-label">Words Learning</span>
-      </div>
-      <div class="progress-card">
-        <div class="progress-card-icon">🎯</div>
-        <span class="progress-card-num" id="pAccuracy">—</span>
-        <span class="progress-card-label">Quiz Accuracy</span>
-      </div>
-      <div class="progress-card">
-        <div class="progress-card-icon">🔥</div>
-        <span class="progress-card-num" id="pStreak">0</span>
-        <span class="progress-card-label">Correct Streak</span>
-      </div>
+      <div class="progress-card"><div class="progress-card-icon">⭐</div><span class="progress-card-num" id="pMastered">0</span><span class="progress-card-label">Mastered</span></div>
+      <div class="progress-card"><div class="progress-card-icon">📖</div><span class="progress-card-num" id="pLearning">0</span><span class="progress-card-label">Learning</span></div>
+      <div class="progress-card"><div class="progress-card-icon">🔁</div><span class="progress-card-num" id="pDue">0</span><span class="progress-card-label">Due Today</span></div>
+      <div class="progress-card"><div class="progress-card-icon">🎯</div><span class="progress-card-num" id="pAccuracy">—</span><span class="progress-card-label">Accuracy</span></div>
+      <div class="progress-card"><div class="progress-card-icon">🔥</div><span class="progress-card-num" id="pStreak">0</span><span class="progress-card-label">Streak</span></div>
     </div>
-
+    <div style="text-align:right;margin-bottom:0.8rem;">
+      <button class="reset-btn" onclick="confirmReset()">Reset all progress</button>
+    </div>
     <div class="divider">· · · ✦ · · ·</div>
-
     <h3 class="section-title">Word Progress</h3>
     <div class="word-mastery-list">
-      <div class="word-mastery-header">
-        <span>French</span>
-        <span>English</span>
-        <span>Level</span>
-      </div>
+      <div class="word-mastery-header"><span>French</span><span>English</span><span>Level</span><span>Next Review</span></div>
       <div id="masteryList"></div>
     </div>
   </div>
-
 </main>
 
 <script>
-// ─────────────────────────────────────────────
-// DATA
-// ─────────────────────────────────────────────
 const words = [
-  // Essentials
-  { fr:'bonjour', en:'hello / good day', ipa:'/bɔ̃.ʒuʁ/', cat:'Essentials', ex:'Bonjour, comment allez-vous ?', exEn:'Hello, how are you?' },
-  { fr:'bonsoir', en:'good evening', ipa:'/bɔ̃.swaʁ/', cat:'Essentials', ex:'Bonsoir, tout le monde !', exEn:'Good evening, everyone!' },
-  { fr:'au revoir', en:'goodbye', ipa:'/o.ʁə.vwaʁ/', cat:'Essentials', ex:'Au revoir et bonne journée !', exEn:'Goodbye and have a good day!' },
-  { fr:'s\'il vous plaît', en:'please (formal)', ipa:'/sil.vu.plɛ/', cat:'Essentials', ex:'Un café, s\'il vous plaît.', exEn:'A coffee, please.' },
-  { fr:'merci', en:'thank you', ipa:'/mɛʁ.si/', cat:'Essentials', ex:'Merci beaucoup !', exEn:'Thank you very much!' },
-  { fr:'de rien', en:'you\'re welcome', ipa:'/də.ʁjɛ̃/', cat:'Essentials', ex:'Merci ! – De rien.', exEn:'Thank you! – You\'re welcome.' },
-  { fr:'excusez-moi', en:'excuse me', ipa:'/ɛk.sky.ze.mwa/', cat:'Essentials', ex:'Excusez-moi, où est la gare ?', exEn:'Excuse me, where is the station?' },
-  { fr:'oui', en:'yes', ipa:'/wi/', cat:'Essentials', ex:'Oui, c\'est correct.', exEn:'Yes, that\'s correct.' },
-  { fr:'non', en:'no', ipa:'/nɔ̃/', cat:'Essentials', ex:'Non, merci.', exEn:'No, thank you.' },
-  { fr:'pardon', en:'sorry / pardon', ipa:'/paʁ.dɔ̃/', cat:'Essentials', ex:'Pardon, je ne comprends pas.', exEn:'Sorry, I don\'t understand.' },
-
-  // Numbers
-  { fr:'un / une', en:'one', ipa:'/œ̃ / yn/', cat:'Numbers', ex:'J\'ai un enfant.', exEn:'I have one child.' },
-  { fr:'deux', en:'two', ipa:'/dø/', cat:'Numbers', ex:'Deux cafés, s\'il vous plaît.', exEn:'Two coffees, please.' },
-  { fr:'trois', en:'three', ipa:'/tʁwa/', cat:'Numbers', ex:'Nous sommes trois.', exEn:'There are three of us.' },
-  { fr:'quatre', en:'four', ipa:'/katʁ/', cat:'Numbers', ex:'Quatre heures de l\'après-midi.', exEn:'Four o\'clock in the afternoon.' },
-  { fr:'cinq', en:'five', ipa:'/sɛ̃k/', cat:'Numbers', ex:'Cinq minutes, s\'il vous plaît.', exEn:'Five minutes, please.' },
-  { fr:'dix', en:'ten', ipa:'/dis/', cat:'Numbers', ex:'Je reviens dans dix minutes.', exEn:'I\'ll be back in ten minutes.' },
-  { fr:'cent', en:'one hundred', ipa:'/sɑ̃/', cat:'Numbers', ex:'Cent euros, s\'il vous plaît.', exEn:'One hundred euros, please.' },
-
-  // Time
-  { fr:'aujourd\'hui', en:'today', ipa:'/o.ʒuʁ.dɥi/', cat:'Time', ex:'Aujourd\'hui il fait beau.', exEn:'Today the weather is nice.' },
-  { fr:'demain', en:'tomorrow', ipa:'/də.mɛ̃/', cat:'Time', ex:'On se voit demain.', exEn:'We\'ll see each other tomorrow.' },
-  { fr:'hier', en:'yesterday', ipa:'/jɛʁ/', cat:'Time', ex:'Hier, j\'ai fait du vélo.', exEn:'Yesterday, I rode a bike.' },
-  { fr:'maintenant', en:'now', ipa:'/mɛ̃.tə.nɑ̃/', cat:'Time', ex:'Je suis prêt maintenant.', exEn:'I\'m ready now.' },
-  { fr:'matin', en:'morning', ipa:'/ma.tɛ̃/', cat:'Time', ex:'Je me lève le matin.', exEn:'I wake up in the morning.' },
-  { fr:'soir', en:'evening', ipa:'/swaʁ/', cat:'Time', ex:'On mange le soir ensemble.', exEn:'We eat together in the evening.' },
-
-  // People
-  { fr:'je', en:'I', ipa:'/ʒə/', cat:'People', ex:'Je suis anglaise.', exEn:'I am English.' },
-  { fr:'tu / vous', en:'you', ipa:'/ty / vu/', cat:'People', ex:'Tu parles français ?', exEn:'Do you speak French?' },
-  { fr:'il / elle', en:'he / she', ipa:'/il / ɛl/', cat:'People', ex:'Elle s\'appelle Marie.', exEn:'Her name is Marie.' },
-  { fr:'nous', en:'we', ipa:'/nu/', cat:'People', ex:'Nous aimons Paris.', exEn:'We love Paris.' },
-  { fr:'ami / amie', en:'friend', ipa:'/a.mi/', cat:'People', ex:'C\'est mon meilleur ami.', exEn:'He is my best friend.' },
-  { fr:'famille', en:'family', ipa:'/fa.mij/', cat:'People', ex:'Ma famille habite à Londres.', exEn:'My family lives in London.' },
-  { fr:'homme', en:'man', ipa:'/ɔm/', cat:'People', ex:'L\'homme est grand.', exEn:'The man is tall.' },
-  { fr:'femme', en:'woman / wife', ipa:'/fam/', cat:'People', ex:'Ma femme parle français.', exEn:'My wife speaks French.' },
-  { fr:'enfant', en:'child', ipa:'/ɑ̃.fɑ̃/', cat:'People', ex:'L\'enfant joue dans le jardin.', exEn:'The child plays in the garden.' },
-
-  // Places
-  { fr:'maison', en:'house / home', ipa:'/mɛ.zɔ̃/', cat:'Places', ex:'Je rentre à la maison.', exEn:'I\'m going home.' },
-  { fr:'rue', en:'street', ipa:'/ʁy/', cat:'Places', ex:'La boulangerie est dans cette rue.', exEn:'The bakery is on this street.' },
-  { fr:'ville', en:'city / town', ipa:'/vil/', cat:'Places', ex:'Paris est une belle ville.', exEn:'Paris is a beautiful city.' },
-  { fr:'restaurant', en:'restaurant', ipa:'/ʁɛs.to.ʁɑ̃/', cat:'Places', ex:'On va au restaurant ce soir.', exEn:'We\'re going to the restaurant tonight.' },
-  { fr:'hôtel', en:'hotel', ipa:'/o.tɛl/', cat:'Places', ex:'L\'hôtel est près de la gare.', exEn:'The hotel is near the station.' },
-  { fr:'gare', en:'train station', ipa:'/ɡaʁ/', cat:'Places', ex:'La gare est à dix minutes.', exEn:'The station is ten minutes away.' },
-  { fr:'marché', en:'market', ipa:'/maʁ.ʃe/', cat:'Places', ex:'Je fais le marché le samedi.', exEn:'I go to the market on Saturdays.' },
-
-  // Food & Drink
-  { fr:'pain', en:'bread', ipa:'/pɛ̃/', cat:'Food', ex:'Une baguette de pain, s\'il vous plaît.', exEn:'A baguette, please.' },
-  { fr:'vin', en:'wine', ipa:'/vɛ̃/', cat:'Food', ex:'Un verre de vin rouge, s\'il vous plaît.', exEn:'A glass of red wine, please.' },
-  { fr:'eau', en:'water', ipa:'/o/', cat:'Food', ex:'Une carafe d\'eau, s\'il vous plaît.', exEn:'A jug of water, please.' },
-  { fr:'café', en:'coffee', ipa:'/ka.fe/', cat:'Food', ex:'Je prends un café le matin.', exEn:'I have a coffee in the morning.' },
-  { fr:'fromage', en:'cheese', ipa:'/fʁo.maʒ/', cat:'Food', ex:'Le fromage français est délicieux.', exEn:'French cheese is delicious.' },
-  { fr:'poulet', en:'chicken', ipa:'/pu.lɛ/', cat:'Food', ex:'Le poulet rôti est parfait.', exEn:'The roast chicken is perfect.' },
-  { fr:'dessert', en:'dessert', ipa:'/de.sɛʁ/', cat:'Food', ex:'Qu\'est-ce qu\'il y a comme dessert ?', exEn:'What\'s for dessert?' },
-
-  // Actions
-  { fr:'parler', en:'to speak', ipa:'/paʁ.le/', cat:'Actions', ex:'Je parle un peu français.', exEn:'I speak a little French.' },
-  { fr:'manger', en:'to eat', ipa:'/mɑ̃.ʒe/', cat:'Actions', ex:'Nous aimons manger dehors.', exEn:'We love eating outside.' },
-  { fr:'boire', en:'to drink', ipa:'/bwaʁ/', cat:'Actions', ex:'Je voudrais boire quelque chose.', exEn:'I would like to drink something.' },
-  { fr:'aller', en:'to go', ipa:'/a.le/', cat:'Actions', ex:'On va au marché ce matin.', exEn:'We\'re going to the market this morning.' },
-  { fr:'venir', en:'to come', ipa:'/və.niʁ/', cat:'Actions', ex:'Tu peux venir ce soir ?', exEn:'Can you come tonight?' },
-  { fr:'comprendre', en:'to understand', ipa:'/kɔ̃.pʁɑ̃.dʁ/', cat:'Actions', ex:'Je ne comprends pas.', exEn:'I don\'t understand.' },
-  { fr:'chercher', en:'to look for', ipa:'/ʃɛʁ.ʃe/', cat:'Actions', ex:'Je cherche la boulangerie.', exEn:'I\'m looking for the bakery.' },
-  { fr:'aimer', en:'to love / like', ipa:'/ɛ.me/', cat:'Actions', ex:'J\'aime beaucoup la France.', exEn:'I love France very much.' },
-
-  // Descriptions
-  { fr:'grand / grande', en:'big / tall', ipa:'/ɡʁɑ̃ / ɡʁɑ̃d/', cat:'Descriptions', ex:'C\'est un grand musée.', exEn:'It\'s a big museum.' },
-  { fr:'petit / petite', en:'small / little', ipa:'/pə.ti / pə.tit/', cat:'Descriptions', ex:'Un petit café au coin.', exEn:'A little café on the corner.' },
-  { fr:'beau / belle', en:'beautiful', ipa:'/bo / bɛl/', cat:'Descriptions', ex:'Quelle belle journée !', exEn:'What a beautiful day!' },
-  { fr:'bon / bonne', en:'good', ipa:'/bɔ̃ / bɔn/', cat:'Descriptions', ex:'Le repas était très bon.', exEn:'The meal was very good.' },
-  { fr:'cher / chère', en:'expensive / dear', ipa:'/ʃɛʁ/', cat:'Descriptions', ex:'C\'est un peu cher.', exEn:'It\'s a bit expensive.' },
-  { fr:'chaud / froide', en:'hot / cold', ipa:'/ʃo / fʁwad/', cat:'Descriptions', ex:'Le café est trop chaud.', exEn:'The coffee is too hot.' },
-  { fr:'nouveau / nouvelle', en:'new', ipa:'/nu.vo / nu.vɛl/', cat:'Descriptions', ex:'J\'ai un nouveau sac.', exEn:'I have a new bag.' },
+  {fr:'bonjour',en:'hello / good day',ipa:'/bɔ̃.ʒuʁ/',cat:'Essentials',ex:'Bonjour, comment allez-vous ?',exEn:'Hello, how are you?'},
+  {fr:'bonsoir',en:'good evening',ipa:'/bɔ̃.swaʁ/',cat:'Essentials',ex:'Bonsoir, tout le monde !',exEn:'Good evening, everyone!'},
+  {fr:'au revoir',en:'goodbye',ipa:'/o.ʁə.vwaʁ/',cat:'Essentials',ex:'Au revoir et bonne journée !',exEn:'Goodbye and have a good day!'},
+  {fr:"s'il vous plaît",en:'please (formal)',ipa:'/sil.vu.plɛ/',cat:'Essentials',ex:"Un café, s'il vous plaît.",exEn:'A coffee, please.'},
+  {fr:"s'il te plaît",en:'please (informal)',ipa:'/sil.tə.plɛ/',cat:'Essentials',ex:"Aide-moi, s'il te plaît.",exEn:'Help me, please.'},
+  {fr:'merci',en:'thank you',ipa:'/mɛʁ.si/',cat:'Essentials',ex:'Merci beaucoup !',exEn:'Thank you very much!'},
+  {fr:'merci beaucoup',en:'thank you very much',ipa:'/mɛʁ.si bo.ku/',cat:'Essentials',ex:'Merci beaucoup pour votre aide.',exEn:'Thank you very much for your help.'},
+  {fr:'de rien',en:"you're welcome",ipa:'/də.ʁjɛ̃/',cat:'Essentials',ex:"Merci ! – De rien.",exEn:"Thank you! – You're welcome."},
+  {fr:'excusez-moi',en:'excuse me (formal)',ipa:'/ɛk.sky.ze.mwa/',cat:'Essentials',ex:'Excusez-moi, où est la gare ?',exEn:'Excuse me, where is the station?'},
+  {fr:'pardon',en:'sorry / pardon',ipa:'/paʁ.dɔ̃/',cat:'Essentials',ex:'Pardon, je ne comprends pas.',exEn:"Sorry, I don't understand."},
+  {fr:'désolé',en:'sorry (sincere)',ipa:'/de.zo.le/',cat:'Essentials',ex:'Je suis vraiment désolé.',exEn:'I am really sorry.'},
+  {fr:'oui',en:'yes',ipa:'/wi/',cat:'Essentials',ex:"Oui, c'est correct.",exEn:"Yes, that's correct."},
+  {fr:'non',en:'no',ipa:'/nɔ̃/',cat:'Essentials',ex:'Non, merci.',exEn:'No, thank you.'},
+  {fr:'peut-être',en:'maybe / perhaps',ipa:'/pø.tɛtʁ/',cat:'Essentials',ex:'Peut-être demain.',exEn:'Maybe tomorrow.'},
+  {fr:'bien sûr',en:'of course',ipa:'/bjɛ̃.syʁ/',cat:'Essentials',ex:'Bien sûr, avec plaisir !',exEn:'Of course, with pleasure!'},
+  {fr:"d'accord",en:'OK / agreed',ipa:'/da.kɔʁ/',cat:'Essentials',ex:"D'accord, on se retrouve à midi.",exEn:"OK, we'll meet at noon."},
+  {fr:'voilà',en:'here it is / there you go',ipa:'/vwa.la/',cat:'Essentials',ex:'Voilà votre café.',exEn:'Here is your coffee.'},
+  {fr:'comment',en:'how',ipa:'/kɔ.mɑ̃/',cat:'Essentials',ex:'Comment allez-vous ?',exEn:'How are you?'},
+  {fr:'où',en:'where',ipa:'/u/',cat:'Essentials',ex:'Où est le restaurant ?',exEn:'Where is the restaurant?'},
+  {fr:'quand',en:'when',ipa:'/kɑ̃/',cat:'Essentials',ex:'Quand partez-vous ?',exEn:'When are you leaving?'},
+  {fr:'pourquoi',en:'why',ipa:'/puʁ.kwa/',cat:'Essentials',ex:'Pourquoi pas ?',exEn:'Why not?'},
+  {fr:'qui',en:'who',ipa:'/ki/',cat:'Essentials',ex:"Qui est-ce ?",exEn:'Who is it?'},
+  {fr:'combien',en:'how much / how many',ipa:'/kɔ̃.bjɛ̃/',cat:'Essentials',ex:'Combien ça coûte ?',exEn:'How much does it cost?'},
+  {fr:'zéro',en:'zero',ipa:'/ze.ʁo/',cat:'Numbers',ex:'Mon numéro commence par zéro.',exEn:'My number starts with zero.'},
+  {fr:'un / une',en:'one',ipa:'/œ̃ / yn/',cat:'Numbers',ex:"J'ai un enfant.",exEn:'I have one child.'},
+  {fr:'deux',en:'two',ipa:'/dø/',cat:'Numbers',ex:"Deux cafés, s'il vous plaît.",exEn:'Two coffees, please.'},
+  {fr:'trois',en:'three',ipa:'/tʁwa/',cat:'Numbers',ex:'Nous sommes trois.',exEn:'There are three of us.'},
+  {fr:'quatre',en:'four',ipa:'/katʁ/',cat:'Numbers',ex:"Quatre heures de l'après-midi.",exEn:'Four in the afternoon.'},
+  {fr:'cinq',en:'five',ipa:'/sɛ̃k/',cat:'Numbers',ex:"Cinq minutes, s'il vous plaît.",exEn:'Five minutes, please.'},
+  {fr:'six',en:'six',ipa:'/sis/',cat:'Numbers',ex:'Six personnes au total.',exEn:'Six people in total.'},
+  {fr:'sept',en:'seven',ipa:'/sɛt/',cat:'Numbers',ex:'Il est sept heures.',exEn:"It's seven o'clock."},
+  {fr:'huit',en:'eight',ipa:'/ɥit/',cat:'Numbers',ex:'Huit jours, une semaine.',exEn:'Eight days, one week.'},
+  {fr:'neuf',en:'nine',ipa:'/nœf/',cat:'Numbers',ex:'Neuf euros, merci.',exEn:'Nine euros, thank you.'},
+  {fr:'dix',en:'ten',ipa:'/dis/',cat:'Numbers',ex:'Je reviens dans dix minutes.',exEn:"I'll be back in ten minutes."},
+  {fr:'vingt',en:'twenty',ipa:'/vɛ̃/',cat:'Numbers',ex:'Vingt euros, merci.',exEn:'Twenty euros, thank you.'},
+  {fr:'trente',en:'thirty',ipa:'/tʁɑ̃t/',cat:'Numbers',ex:"J'ai trente ans.",exEn:'I am thirty years old.'},
+  {fr:'cent',en:'one hundred',ipa:'/sɑ̃/',cat:'Numbers',ex:"Cent euros, s'il vous plaît.",exEn:'One hundred euros, please.'},
+  {fr:'mille',en:'one thousand',ipa:'/mil/',cat:'Numbers',ex:'Ça coûte mille euros.',exEn:'It costs one thousand euros.'},
+  {fr:"aujourd'hui",en:'today',ipa:"/o.ʒuʁ.dɥi/",cat:'Time',ex:"Aujourd'hui il fait beau.",exEn:'Today the weather is nice.'},
+  {fr:'demain',en:'tomorrow',ipa:'/də.mɛ̃/',cat:'Time',ex:'On se voit demain.',exEn:"We'll see each other tomorrow."},
+  {fr:'hier',en:'yesterday',ipa:'/jɛʁ/',cat:'Time',ex:"Hier, j'ai fait du vélo.",exEn:'Yesterday, I rode a bike.'},
+  {fr:'maintenant',en:'now',ipa:'/mɛ̃.tə.nɑ̃/',cat:'Time',ex:'Je suis prêt maintenant.',exEn:"I'm ready now."},
+  {fr:'bientôt',en:'soon',ipa:'/bjɛ̃.to/',cat:'Time',ex:"À bientôt !",exEn:'See you soon!'},
+  {fr:'toujours',en:'always',ipa:'/tu.ʒuʁ/',cat:'Time',ex:"J'aime toujours le café.",exEn:'I always love coffee.'},
+  {fr:'jamais',en:'never',ipa:'/ʒa.mɛ/',cat:'Time',ex:'Je ne fume jamais.',exEn:'I never smoke.'},
+  {fr:'souvent',en:'often',ipa:'/su.vɑ̃/',cat:'Time',ex:'Je vais souvent au marché.',exEn:'I often go to the market.'},
+  {fr:'parfois',en:'sometimes',ipa:'/paʁ.fwa/',cat:'Time',ex:'Parfois je cuisine.',exEn:'Sometimes I cook.'},
+  {fr:'matin',en:'morning',ipa:'/ma.tɛ̃/',cat:'Time',ex:'Je me lève le matin.',exEn:'I wake up in the morning.'},
+  {fr:'soir',en:'evening',ipa:'/swaʁ/',cat:'Time',ex:'On mange le soir ensemble.',exEn:'We eat together in the evening.'},
+  {fr:'nuit',en:'night',ipa:'/nɥi/',cat:'Time',ex:'Bonne nuit !',exEn:'Good night!'},
+  {fr:'semaine',en:'week',ipa:'/sə.mɛn/',cat:'Time',ex:'La semaine prochaine.',exEn:'Next week.'},
+  {fr:'mois',en:'month',ipa:'/mwa/',cat:'Time',ex:'Le mois de juin.',exEn:'The month of June.'},
+  {fr:'année',en:'year',ipa:'/a.ne/',cat:'Time',ex:'Bonne année !',exEn:'Happy New Year!'},
+  {fr:'heure',en:'hour / time',ipa:'/œʁ/',cat:'Time',ex:'Quelle heure est-il ?',exEn:'What time is it?'},
+  {fr:'je',en:'I',ipa:'/ʒə/',cat:'People',ex:'Je suis anglaise.',exEn:'I am English.'},
+  {fr:'tu / vous',en:'you',ipa:'/ty / vu/',cat:'People',ex:'Tu parles français ?',exEn:'Do you speak French?'},
+  {fr:'il / elle',en:'he / she',ipa:'/il / ɛl/',cat:'People',ex:"Elle s'appelle Marie.",exEn:'Her name is Marie.'},
+  {fr:'nous',en:'we',ipa:'/nu/',cat:'People',ex:'Nous aimons Paris.',exEn:'We love Paris.'},
+  {fr:'ils / elles',en:'they',ipa:'/il / ɛl/',cat:'People',ex:'Ils arrivent demain.',exEn:"They're arriving tomorrow."},
+  {fr:'ami / amie',en:'friend (m/f)',ipa:'/a.mi/',cat:'People',ex:"C'est mon meilleur ami.",exEn:'He is my best friend.'},
+  {fr:'famille',en:'family',ipa:'/fa.mij/',cat:'People',ex:'Ma famille habite à Londres.',exEn:'My family lives in London.'},
+  {fr:'homme',en:'man',ipa:'/ɔm/',cat:'People',ex:"L'homme est grand.",exEn:'The man is tall.'},
+  {fr:'femme',en:'woman / wife',ipa:'/fam/',cat:'People',ex:'Ma femme parle français.',exEn:'My wife speaks French.'},
+  {fr:'enfant',en:'child',ipa:'/ɑ̃.fɑ̃/',cat:'People',ex:"L'enfant joue dans le jardin.",exEn:'The child plays in the garden.'},
+  {fr:'père',en:'father',ipa:'/pɛʁ/',cat:'People',ex:'Mon père est médecin.',exEn:'My father is a doctor.'},
+  {fr:'mère',en:'mother',ipa:'/mɛʁ/',cat:'People',ex:'Ma mère cuisine très bien.',exEn:'My mother cooks very well.'},
+  {fr:'frère',en:'brother',ipa:'/fʁɛʁ/',cat:'People',ex:'Mon frère habite à Paris.',exEn:'My brother lives in Paris.'},
+  {fr:'sœur',en:'sister',ipa:'/sœʁ/',cat:'People',ex:'Ma sœur est avocate.',exEn:'My sister is a lawyer.'},
+  {fr:'mari',en:'husband',ipa:'/ma.ʁi/',cat:'People',ex:'Mon mari est gentil.',exEn:'My husband is kind.'},
+  {fr:'maison',en:'house / home',ipa:'/mɛ.zɔ̃/',cat:'Places',ex:'Je rentre à la maison.',exEn:"I'm going home."},
+  {fr:'appartement',en:'apartment',ipa:'/a.paʁ.tə.mɑ̃/',cat:'Places',ex:"J'habite dans un appartement.",exEn:'I live in an apartment.'},
+  {fr:'rue',en:'street',ipa:'/ʁy/',cat:'Places',ex:'La boulangerie est dans cette rue.',exEn:'The bakery is on this street.'},
+  {fr:'ville',en:'city / town',ipa:'/vil/',cat:'Places',ex:'Paris est une belle ville.',exEn:'Paris is a beautiful city.'},
+  {fr:'pays',en:'country',ipa:'/pe.i/',cat:'Places',ex:'La France est un beau pays.',exEn:'France is a beautiful country.'},
+  {fr:'restaurant',en:'restaurant',ipa:'/ʁɛs.to.ʁɑ̃/',cat:'Places',ex:'On va au restaurant ce soir.',exEn:"We're going to the restaurant tonight."},
+  {fr:'boulangerie',en:'bakery',ipa:'/bu.lɑ̃.ʒʁi/',cat:'Places',ex:'La boulangerie ouvre à sept heures.',exEn:'The bakery opens at seven.'},
+  {fr:'hôtel',en:'hotel',ipa:'/o.tɛl/',cat:'Places',ex:"L'hôtel est près de la gare.",exEn:'The hotel is near the station.'},
+  {fr:'gare',en:'train station',ipa:'/ɡaʁ/',cat:'Places',ex:'La gare est à dix minutes.',exEn:'The station is ten minutes away.'},
+  {fr:'aéroport',en:'airport',ipa:'/a.e.ʁo.pɔʁ/',cat:'Places',ex:"L'aéroport est loin.",exEn:'The airport is far.'},
+  {fr:'marché',en:'market',ipa:'/maʁ.ʃe/',cat:'Places',ex:'Je fais le marché le samedi.',exEn:'I go to the market on Saturdays.'},
+  {fr:'hôpital',en:'hospital',ipa:'/o.pi.tal/',cat:'Places',ex:"L'hôpital est au centre-ville.",exEn:'The hospital is in the town centre.'},
+  {fr:'pharmacie',en:'pharmacy',ipa:'/faʁ.ma.si/',cat:'Places',ex:'La pharmacie est ouverte.',exEn:'The pharmacy is open.'},
+  {fr:'musée',en:'museum',ipa:'/my.ze/',cat:'Places',ex:'Le musée du Louvre est incroyable.',exEn:'The Louvre museum is incredible.'},
+  {fr:'plage',en:'beach',ipa:'/plaʒ/',cat:'Places',ex:'La plage est belle en été.',exEn:'The beach is beautiful in summer.'},
+  {fr:'pain',en:'bread',ipa:'/pɛ̃/',cat:'Food',ex:"Une baguette de pain, s'il vous plaît.",exEn:'A baguette, please.'},
+  {fr:'vin',en:'wine',ipa:'/vɛ̃/',cat:'Food',ex:"Un verre de vin rouge, s'il vous plaît.",exEn:'A glass of red wine, please.'},
+  {fr:'eau',en:'water',ipa:'/o/',cat:'Food',ex:"Une carafe d'eau, s'il vous plaît.",exEn:'A jug of water, please.'},
+  {fr:'café',en:'coffee',ipa:'/ka.fe/',cat:'Food',ex:'Je prends un café le matin.',exEn:'I have a coffee in the morning.'},
+  {fr:'thé',en:'tea',ipa:'/te/',cat:'Food',ex:"Je voudrais un thé, s'il vous plaît.",exEn:'I would like a tea, please.'},
+  {fr:'bière',en:'beer',ipa:'/bjɛʁ/',cat:'Food',ex:'Une bière froide, merci.',exEn:'A cold beer, thank you.'},
+  {fr:'fromage',en:'cheese',ipa:'/fʁo.maʒ/',cat:'Food',ex:'Le fromage français est délicieux.',exEn:'French cheese is delicious.'},
+  {fr:'viande',en:'meat',ipa:'/vjɑ̃d/',cat:'Food',ex:'Je ne mange pas de viande.',exEn:"I don't eat meat."},
+  {fr:'poisson',en:'fish',ipa:'/pwa.sɔ̃/',cat:'Food',ex:'Le poisson est très frais.',exEn:'The fish is very fresh.'},
+  {fr:'poulet',en:'chicken',ipa:'/pu.lɛ/',cat:'Food',ex:'Le poulet rôti est parfait.',exEn:'The roast chicken is perfect.'},
+  {fr:'légumes',en:'vegetables',ipa:'/le.ɡym/',cat:'Food',ex:"J'aime les légumes frais.",exEn:'I love fresh vegetables.'},
+  {fr:'dessert',en:'dessert',ipa:'/de.sɛʁ/',cat:'Food',ex:"Qu'est-ce qu'il y a comme dessert ?",exEn:"What's for dessert?"},
+  {fr:'petit-déjeuner',en:'breakfast',ipa:'/pə.ti.de.ʒø.ne/',cat:'Food',ex:'Le petit-déjeuner est inclus.',exEn:'Breakfast is included.'},
+  {fr:'déjeuner',en:'lunch',ipa:'/de.ʒø.ne/',cat:'Food',ex:'On déjeune ensemble ?',exEn:'Shall we have lunch together?'},
+  {fr:'dîner',en:'dinner',ipa:'/di.ne/',cat:'Food',ex:'Le dîner est à vingt heures.',exEn:'Dinner is at eight.'},
+  {fr:'sucre',en:'sugar',ipa:'/sykʁ/',cat:'Food',ex:"Avec du sucre, s'il vous plaît.",exEn:'With sugar, please.'},
+  {fr:'être',en:'to be',ipa:'/ɛtʁ/',cat:'Actions',ex:'Je suis heureux.',exEn:'I am happy.'},
+  {fr:'avoir',en:'to have',ipa:'/a.vwaʁ/',cat:'Actions',ex:"J'ai faim.",exEn:'I am hungry.'},
+  {fr:'faire',en:'to do / make',ipa:'/fɛʁ/',cat:'Actions',ex:'Que faites-vous ?',exEn:'What are you doing?'},
+  {fr:'aller',en:'to go',ipa:'/a.le/',cat:'Actions',ex:'On va au marché ce matin.',exEn:"We're going to the market this morning."},
+  {fr:'venir',en:'to come',ipa:'/və.niʁ/',cat:'Actions',ex:'Tu peux venir ce soir ?',exEn:'Can you come tonight?'},
+  {fr:'parler',en:'to speak',ipa:'/paʁ.le/',cat:'Actions',ex:'Je parle un peu français.',exEn:'I speak a little French.'},
+  {fr:'manger',en:'to eat',ipa:'/mɑ̃.ʒe/',cat:'Actions',ex:'Nous aimons manger dehors.',exEn:'We love eating outside.'},
+  {fr:'boire',en:'to drink',ipa:'/bwaʁ/',cat:'Actions',ex:'Je voudrais boire quelque chose.',exEn:'I would like to drink something.'},
+  {fr:'comprendre',en:'to understand',ipa:'/kɔ̃.pʁɑ̃.dʁ/',cat:'Actions',ex:'Je ne comprends pas.',exEn:"I don't understand."},
+  {fr:'savoir',en:'to know (a fact)',ipa:'/sa.vwaʁ/',cat:'Actions',ex:'Je ne sais pas.',exEn:"I don't know."},
+  {fr:'vouloir',en:'to want',ipa:'/vu.lwaʁ/',cat:'Actions',ex:'Je voudrais un café.',exEn:'I would like a coffee.'},
+  {fr:'pouvoir',en:'to be able to / can',ipa:'/pu.vwaʁ/',cat:'Actions',ex:'Pouvez-vous répéter ?',exEn:'Can you repeat?'},
+  {fr:'devoir',en:'to have to / must',ipa:'/də.vwaʁ/',cat:'Actions',ex:'Je dois partir.',exEn:'I have to leave.'},
+  {fr:'aimer',en:'to love / like',ipa:'/ɛ.me/',cat:'Actions',ex:"J'aime beaucoup la France.",exEn:'I love France very much.'},
+  {fr:'chercher',en:'to look for',ipa:'/ʃɛʁ.ʃe/',cat:'Actions',ex:'Je cherche la boulangerie.',exEn:"I'm looking for the bakery."},
+  {fr:'trouver',en:'to find',ipa:'/tʁu.ve/',cat:'Actions',ex:'Je ne trouve pas mon passeport.',exEn:"I can't find my passport."},
+  {fr:'acheter',en:'to buy',ipa:'/aʃ.te/',cat:'Actions',ex:'Je voudrais acheter un souvenir.',exEn:'I would like to buy a souvenir.'},
+  {fr:'payer',en:'to pay',ipa:'/pe.je/',cat:'Actions',ex:'Je voudrais payer.',exEn:'I would like to pay.'},
+  {fr:'appeler',en:'to call',ipa:'/a.ple/',cat:'Actions',ex:"J'appelle un taxi.",exEn:"I'm calling a taxi."},
+  {fr:'réserver',en:'to book / reserve',ipa:'/ʁe.zɛʁ.ve/',cat:'Actions',ex:"J'ai réservé une table.",exEn:"I've booked a table."},
+  {fr:'attendre',en:'to wait',ipa:'/a.tɑ̃dʁ/',cat:'Actions',ex:'Je dois attendre.',exEn:'I have to wait.'},
+  {fr:'partir',en:'to leave',ipa:'/paʁ.tiʁ/',cat:'Actions',ex:'Je pars demain.',exEn:"I'm leaving tomorrow."},
+  {fr:'arriver',en:'to arrive',ipa:'/a.ʁi.ve/',cat:'Actions',ex:"J'arrive à midi.",exEn:"I'm arriving at noon."},
+  {fr:'ouvrir',en:'to open',ipa:'/u.vʁiʁ/',cat:'Actions',ex:'La boutique ouvre à dix heures.',exEn:'The shop opens at ten.'},
+  {fr:'fermer',en:'to close',ipa:'/fɛʁ.me/',cat:'Actions',ex:'Le musée ferme à dix-huit heures.',exEn:'The museum closes at six.'},
+  {fr:'grand / grande',en:'big / tall',ipa:'/ɡʁɑ̃ / ɡʁɑ̃d/',cat:'Descriptions',ex:"C'est un grand musée.",exEn:"It's a big museum."},
+  {fr:'petit / petite',en:'small / little',ipa:'/pə.ti / pə.tit/',cat:'Descriptions',ex:'Un petit café au coin.',exEn:'A little café on the corner.'},
+  {fr:'beau / belle',en:'beautiful',ipa:'/bo / bɛl/',cat:'Descriptions',ex:'Quelle belle journée !',exEn:'What a beautiful day!'},
+  {fr:'bon / bonne',en:'good',ipa:'/bɔ̃ / bɔn/',cat:'Descriptions',ex:'Le repas était très bon.',exEn:'The meal was very good.'},
+  {fr:'mauvais / mauvaise',en:'bad',ipa:'/mo.vɛ/',cat:'Descriptions',ex:'Le temps est mauvais.',exEn:'The weather is bad.'},
+  {fr:'cher / chère',en:'expensive / dear',ipa:'/ʃɛʁ/',cat:'Descriptions',ex:"C'est un peu cher.",exEn:"It's a bit expensive."},
+  {fr:'gratuit',en:'free (no cost)',ipa:'/ɡʁa.tɥi/',cat:'Descriptions',ex:"C'est gratuit.",exEn:"It's free."},
+  {fr:'chaud / chaude',en:'hot / warm',ipa:'/ʃo / ʃod/',cat:'Descriptions',ex:'Le café est trop chaud.',exEn:'The coffee is too hot.'},
+  {fr:'froid / froide',en:'cold',ipa:'/fʁwa / fʁwad/',cat:'Descriptions',ex:"Il fait froid aujourd'hui.",exEn:"It's cold today."},
+  {fr:'nouveau / nouvelle',en:'new',ipa:'/nu.vo / nu.vɛl/',cat:'Descriptions',ex:"J'ai un nouveau sac.",exEn:'I have a new bag.'},
+  {fr:'vieux / vieille',en:'old',ipa:'/vjø / vjɛj/',cat:'Descriptions',ex:'Ce bâtiment est très vieux.',exEn:'This building is very old.'},
+  {fr:'rapide',en:'fast / quick',ipa:'/ʁa.pid/',cat:'Descriptions',ex:'Le TGV est très rapide.',exEn:'The TGV is very fast.'},
+  {fr:'lent / lente',en:'slow',ipa:'/lɑ̃ / lɑ̃t/',cat:'Descriptions',ex:'Parlez plus lentement.',exEn:'Please speak more slowly.'},
+  {fr:'facile',en:'easy',ipa:'/fa.sil/',cat:'Descriptions',ex:"Le français n'est pas facile !",exEn:"French isn't easy!"},
+  {fr:'difficile',en:'difficult',ipa:'/di.fi.sil/',cat:'Descriptions',ex:'La grammaire est difficile.',exEn:'Grammar is difficult.'},
+  {fr:'heureux / heureuse',en:'happy',ipa:'/œ.ʁø / œ.ʁøz/',cat:'Descriptions',ex:'Je suis très heureux.',exEn:'I am very happy.'},
+  {fr:'fatigué / fatiguée',en:'tired',ipa:'/fa.ti.ɡe/',cat:'Descriptions',ex:'Je suis très fatigué.',exEn:'I am very tired.'},
+  {fr:'malade',en:'ill / sick',ipa:'/ma.lad/',cat:'Descriptions',ex:'Je me sens malade.',exEn:'I feel sick.'},
+  {fr:'billet',en:'ticket',ipa:'/bi.jɛ/',cat:'Travel',ex:'Un billet aller-retour, merci.',exEn:'A return ticket, thank you.'},
+  {fr:'passeport',en:'passport',ipa:'/pas.pɔʁ/',cat:'Travel',ex:'Mon passeport est valide.',exEn:'My passport is valid.'},
+  {fr:'valise',en:'suitcase',ipa:'/va.liz/',cat:'Travel',ex:"J'ai perdu ma valise.",exEn:"I've lost my suitcase."},
+  {fr:'taxi',en:'taxi',ipa:'/tak.si/',cat:'Travel',ex:"J'appelle un taxi.",exEn:"I'm calling a taxi."},
+  {fr:'train',en:'train',ipa:'/tʁɛ̃/',cat:'Travel',ex:'Le train est à neuf heures.',exEn:'The train is at nine.'},
+  {fr:'avion',en:'plane',ipa:'/a.vjɔ̃/',cat:'Travel',ex:"L'avion décolle à midi.",exEn:'The plane takes off at noon.'},
+  {fr:'métro',en:'metro / underground',ipa:'/me.tʁo/',cat:'Travel',ex:'Prenez le métro ligne quatre.',exEn:'Take metro line four.'},
+  {fr:'voiture',en:'car',ipa:'/vwa.tyʁ/',cat:'Travel',ex:'Je loue une voiture.',exEn:"I'm renting a car."},
+  {fr:'droite',en:'right',ipa:'/dʁwat/',cat:'Travel',ex:'Tournez à droite.',exEn:'Turn right.'},
+  {fr:'gauche',en:'left',ipa:'/ɡoʃ/',cat:'Travel',ex:'Tournez à gauche.',exEn:'Turn left.'},
+  {fr:'tout droit',en:'straight ahead',ipa:'/tu.dʁwa/',cat:'Travel',ex:'Allez tout droit.',exEn:'Go straight ahead.'},
+  {fr:'près de',en:'near / close to',ipa:'/pʁɛ.də/',cat:'Travel',ex:"C'est près de la gare.",exEn:"It's near the station."},
+  {fr:'loin de',en:'far from',ipa:'/lwɛ̃.də/',cat:'Travel',ex:"C'est loin d'ici.",exEn:"It's far from here."},
+  {fr:'médecin',en:'doctor',ipa:'/me.dsɛ̃/',cat:'Health',ex:"J'ai besoin d'un médecin.",exEn:'I need a doctor.'},
+  {fr:'douleur',en:'pain',ipa:'/du.lœʁ/',cat:'Health',ex:"J'ai une douleur ici.",exEn:'I have a pain here.'},
+  {fr:'allergie',en:'allergy',ipa:'/a.lɛʁ.ʒi/',cat:'Health',ex:"J'ai une allergie aux noix.",exEn:'I have a nut allergy.'},
+  {fr:'médicament',en:'medicine',ipa:'/me.di.ka.mɑ̃/',cat:'Health',ex:"J'ai besoin de médicaments.",exEn:'I need medication.'},
+  {fr:'urgence',en:'emergency',ipa:'/yʁ.ʒɑ̃s/',cat:'Health',ex:"C'est une urgence !",exEn:"It's an emergency!"},
+  {fr:'temps',en:'weather / time',ipa:'/tɑ̃/',cat:'Weather',ex:'Quel temps fait-il ?',exEn:"What's the weather like?"},
+  {fr:'soleil',en:'sun / sunshine',ipa:'/so.lɛj/',cat:'Weather',ex:'Il y a du soleil.',exEn:"It's sunny."},
+  {fr:'pluie',en:'rain',ipa:'/plɥi/',cat:'Weather',ex:'Il va pleuvoir.',exEn:"It's going to rain."},
+  {fr:'vent',en:'wind',ipa:'/vɑ̃/',cat:'Weather',ex:'Il y a beaucoup de vent.',exEn:"It's very windy."},
+  {fr:'nuage',en:'cloud',ipa:'/nɥaʒ/',cat:'Weather',ex:'Il y a des nuages.',exEn:"It's cloudy."},
+  {fr:'neige',en:'snow',ipa:'/nɛʒ/',cat:'Weather',ex:'Il neige en hiver.',exEn:'It snows in winter.'},
+  {fr:'chaleur',en:'heat',ipa:'/ʃa.lœʁ/',cat:'Weather',ex:'La chaleur est intense.',exEn:'The heat is intense.'},
 ];
 
 const sentences = [
-  { fr:"Bonjour, je m'appelle [votre prénom].", en:"Hello, my name is [your name].", cat:'Greetings', icon:'👋' },
-  { fr:"Comment vous appelez-vous ?", en:"What is your name?", cat:'Greetings', icon:'👋' },
-  { fr:"Enchanté(e) de vous rencontrer.", en:"Pleased to meet you.", cat:'Greetings', icon:'👋' },
-  { fr:"Comment allez-vous ?", en:"How are you? (formal)", cat:'Greetings', icon:'👋' },
-  { fr:"Je vais très bien, merci.", en:"I'm very well, thank you.", cat:'Greetings', icon:'👋' },
-  { fr:"Je ne parle pas très bien français.", en:"I don't speak French very well.", cat:'Greetings', icon:'👋' },
-  { fr:"Parlez-vous anglais ?", en:"Do you speak English?", cat:'Greetings', icon:'👋' },
-  { fr:"Pouvez-vous parler plus lentement ?", en:"Can you speak more slowly?", cat:'Greetings', icon:'👋' },
-
-  { fr:"Une table pour deux, s'il vous plaît.", en:"A table for two, please.", cat:'Dining', icon:'🍽️' },
-  { fr:"La carte, s'il vous plaît.", en:"The menu, please.", cat:'Dining', icon:'🍽️' },
-  { fr:"Je voudrais commander.", en:"I'd like to order.", cat:'Dining', icon:'🍽️' },
-  { fr:"Qu'est-ce que vous recommandez ?", en:"What do you recommend?", cat:'Dining', icon:'🍽️' },
-  { fr:"L'addition, s'il vous plaît.", en:"The bill, please.", cat:'Dining', icon:'🍽️' },
-  { fr:"C'était délicieux, merci.", en:"It was delicious, thank you.", cat:'Dining', icon:'🍽️' },
-  { fr:"Je suis allergique aux noix.", en:"I'm allergic to nuts.", cat:'Dining', icon:'🍽️' },
-  { fr:"Un verre de vin rouge, s'il vous plaît.", en:"A glass of red wine, please.", cat:'Dining', icon:'🍽️' },
-
-  { fr:"Combien ça coûte ?", en:"How much does it cost?", cat:'Shopping', icon:'🛍️' },
-  { fr:"C'est trop cher.", en:"It's too expensive.", cat:'Shopping', icon:'🛍️' },
-  { fr:"Avez-vous une taille plus grande ?", en:"Do you have a larger size?", cat:'Shopping', icon:'🛍️' },
-  { fr:"Je cherche un cadeau.", en:"I'm looking for a gift.", cat:'Shopping', icon:'🛍️' },
-  { fr:"Je voudrais essayer ça.", en:"I'd like to try that on.", cat:'Shopping', icon:'🛍️' },
-  { fr:"Acceptez-vous les cartes bancaires ?", en:"Do you accept credit cards?", cat:'Shopping', icon:'🛍️' },
-
-  { fr:"Où est le métro, s'il vous plaît ?", en:"Where is the metro, please?", cat:'Directions', icon:'🗺️' },
-  { fr:"C'est loin d'ici ?", en:"Is it far from here?", cat:'Directions', icon:'🗺️' },
-  { fr:"Tournez à gauche / à droite.", en:"Turn left / right.", cat:'Directions', icon:'🗺️' },
-  { fr:"Tout droit, puis à gauche.", en:"Straight ahead, then left.", cat:'Directions', icon:'🗺️' },
-  { fr:"À quelle heure part le train ?", en:"What time does the train leave?", cat:'Directions', icon:'🗺️' },
-  { fr:"Je suis perdu(e).", en:"I'm lost.", cat:'Directions', icon:'🗺️' },
-
-  { fr:"Au secours !", en:"Help!", cat:'Emergencies', icon:'🆘' },
-  { fr:"Appelez la police, s'il vous plaît.", en:"Please call the police.", cat:'Emergencies', icon:'🆘' },
-  { fr:"J'ai besoin d'un médecin.", en:"I need a doctor.", cat:'Emergencies', icon:'🆘' },
-  { fr:"J'ai perdu mon passeport.", en:"I've lost my passport.", cat:'Emergencies', icon:'🆘' },
-  { fr:"Où est l'hôpital le plus proche ?", en:"Where is the nearest hospital?", cat:'Emergencies', icon:'🆘' },
-
-  { fr:"Ça vous dérange si je m'assieds ici ?", en:"Do you mind if I sit here?", cat:'Social', icon:'💬' },
-  { fr:"Je vous invite à dîner.", en:"I'm inviting you to dinner.", cat:'Social', icon:'💬' },
-  { fr:"C'est très gentil de votre part.", en:"That's very kind of you.", cat:'Social', icon:'💬' },
-  { fr:"Félicitations !", en:"Congratulations!", cat:'Social', icon:'💬' },
-  { fr:"Bonne chance !", en:"Good luck!", cat:'Social', icon:'💬' },
-  { fr:"Je suis de Londres.", en:"I'm from London.", cat:'Social', icon:'💬' },
+  {fr:"Bonjour, je m'appelle [votre prénom].",en:"Hello, my name is [your name].",cat:'Greetings',icon:'👋'},
+  {fr:"Comment vous appelez-vous ?",en:"What is your name?",cat:'Greetings',icon:'👋'},
+  {fr:"Enchanté(e) de vous rencontrer.",en:"Pleased to meet you.",cat:'Greetings',icon:'👋'},
+  {fr:"Comment allez-vous ?",en:"How are you? (formal)",cat:'Greetings',icon:'👋'},
+  {fr:"Je vais très bien, merci.",en:"I'm very well, thank you.",cat:'Greetings',icon:'👋'},
+  {fr:"Je ne parle pas très bien français.",en:"I don't speak French very well.",cat:'Greetings',icon:'👋'},
+  {fr:"Parlez-vous anglais ?",en:"Do you speak English?",cat:'Greetings',icon:'👋'},
+  {fr:"Pouvez-vous parler plus lentement ?",en:"Can you speak more slowly?",cat:'Greetings',icon:'👋'},
+  {fr:"Répétez, s'il vous plaît.",en:"Please repeat that.",cat:'Greetings',icon:'👋'},
+  {fr:"Une table pour deux, s'il vous plaît.",en:"A table for two, please.",cat:'Dining',icon:'🍽️'},
+  {fr:"La carte, s'il vous plaît.",en:"The menu, please.",cat:'Dining',icon:'🍽️'},
+  {fr:"Je voudrais commander.",en:"I'd like to order.",cat:'Dining',icon:'🍽️'},
+  {fr:"Qu'est-ce que vous recommandez ?",en:"What do you recommend?",cat:'Dining',icon:'🍽️'},
+  {fr:"L'addition, s'il vous plaît.",en:"The bill, please.",cat:'Dining',icon:'🍽️'},
+  {fr:"C'était délicieux, merci.",en:"It was delicious, thank you.",cat:'Dining',icon:'🍽️'},
+  {fr:"Je suis allergique aux noix.",en:"I'm allergic to nuts.",cat:'Dining',icon:'🍽️'},
+  {fr:"Un verre de vin rouge, s'il vous plaît.",en:"A glass of red wine, please.",cat:'Dining',icon:'🍽️'},
+  {fr:"Je suis végétarien(ne).",en:"I am vegetarian.",cat:'Dining',icon:'🍽️'},
+  {fr:"Combien ça coûte ?",en:"How much does it cost?",cat:'Shopping',icon:'🛍️'},
+  {fr:"C'est trop cher.",en:"It's too expensive.",cat:'Shopping',icon:'🛍️'},
+  {fr:"Avez-vous une taille plus grande ?",en:"Do you have a larger size?",cat:'Shopping',icon:'🛍️'},
+  {fr:"Je cherche un cadeau.",en:"I'm looking for a gift.",cat:'Shopping',icon:'🛍️'},
+  {fr:"Acceptez-vous les cartes bancaires ?",en:"Do you accept credit cards?",cat:'Shopping',icon:'🛍️'},
+  {fr:"Où est le métro, s'il vous plaît ?",en:"Where is the metro, please?",cat:'Directions',icon:'🗺️'},
+  {fr:"C'est loin d'ici ?",en:"Is it far from here?",cat:'Directions',icon:'🗺️'},
+  {fr:"Tournez à gauche / à droite.",en:"Turn left / right.",cat:'Directions',icon:'🗺️'},
+  {fr:"Tout droit, puis à gauche.",en:"Straight ahead, then left.",cat:'Directions',icon:'🗺️'},
+  {fr:"Je suis perdu(e).",en:"I'm lost.",cat:'Directions',icon:'🗺️'},
+  {fr:"Au secours !",en:"Help!",cat:'Emergencies',icon:'🆘'},
+  {fr:"Appelez la police, s'il vous plaît.",en:"Please call the police.",cat:'Emergencies',icon:'🆘'},
+  {fr:"J'ai besoin d'un médecin.",en:"I need a doctor.",cat:'Emergencies',icon:'🆘'},
+  {fr:"J'ai perdu mon passeport.",en:"I've lost my passport.",cat:'Emergencies',icon:'🆘'},
+  {fr:"Ça vous dérange si je m'assieds ici ?",en:"Do you mind if I sit here?",cat:'Social',icon:'💬'},
+  {fr:"Félicitations !",en:"Congratulations!",cat:'Social',icon:'💬'},
+  {fr:"Bonne chance !",en:"Good luck!",cat:'Social',icon:'💬'},
+  {fr:"Je suis de Londres.",en:"I'm from London.",cat:'Social',icon:'💬'},
+  {fr:"Je voudrais réserver un billet.",en:"I'd like to book a ticket.",cat:'Travel',icon:'✈️'},
+  {fr:"À quelle heure est le prochain train ?",en:"What time is the next train?",cat:'Travel',icon:'✈️'},
+  {fr:"Mon vol est annulé.",en:"My flight is cancelled.",cat:'Travel',icon:'✈️'},
+  {fr:"Où puis-je trouver un taxi ?",en:"Where can I find a taxi?",cat:'Travel',icon:'✈️'},
+  {fr:"J'ai besoin d'un médecin.",en:"I need a doctor.",cat:'Health',icon:'🏥'},
+  {fr:"J'ai mal à la tête.",en:"I have a headache.",cat:'Health',icon:'🏥'},
+  {fr:"J'ai de la fièvre.",en:"I have a fever.",cat:'Health',icon:'🏥'},
+  {fr:"Où est la pharmacie la plus proche ?",en:"Where is the nearest pharmacy?",cat:'Health',icon:'🏥'},
 ];
 
-// ─────────────────────────────────────────────
+// SRS
+const SRS_INTERVALS = [0,1,3,7];
+function today(){return new Date().toISOString().split('T')[0];}
+function isDue(s){if(!s||!s.nextReview)return true;return s.nextReview<=today();}
+function getNextReview(g){if(g===0)return today();const d=new Date();d.setDate(d.getDate()+SRS_INTERVALS[g]);return d.toISOString().split('T')[0];}
+function formatNextReview(ds){if(!ds)return 'Not started';if(ds<=today())return 'Due now';const d=new Date(ds+'T00:00:00');const diff=Math.ceil((d-new Date())/(1000*60*60*24));if(diff===1)return 'Tomorrow';return 'In '+diff+' days';}
+
+// PERSISTENCE
+const STORAGE_KEY='helena_french_v2';
+function saveProgress(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify({mastery,srs,quizCorrect,quizWrong,quizStreak}));}catch(e){}
+  const ind=document.getElementById('saveIndicator');
+  ind.classList.add('show');
+  setTimeout(()=>ind.classList.remove('show'),2000);
+}
+function loadProgress(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    if(data.mastery)Object.assign(mastery,data.mastery);
+    if(data.srs)Object.assign(srs,data.srs);
+    if(typeof data.quizCorrect==='number')quizCorrect=data.quizCorrect;
+    if(typeof data.quizWrong==='number')quizWrong=data.quizWrong;
+    if(typeof data.quizStreak==='number')quizStreak=data.quizStreak;
+  }catch(e){}
+}
+function confirmReset(){
+  if(confirm('Reset all progress? This cannot be undone.')){
+    localStorage.removeItem(STORAGE_KEY);
+    words.forEach(w=>{mastery[w.fr]=0;srs[w.fr]={};});
+    quizCorrect=0;quizWrong=0;quizStreak=0;
+    updateStats();renderProgress();
+  }
+}
+
 // STATE
-// ─────────────────────────────────────────────
-let cardIndex = 0;
-let filteredWords = [...words];
-let mastery = {}; // 0=unseen/learning, 1=seen, 2=mastered
-let quizCorrect = 0, quizWrong = 0, quizStreak = 0;
-let currentSentenceFilter = 'all';
+let cardIndex=0,filteredWords=[...words],mastery={},srs={};
+let quizCorrect=0,quizWrong=0,quizStreak=0,currentSentenceFilter='all';
+let quizAnswered=false,quizCard=null,srsMode=false,srsQueue=[];
+words.forEach(w=>{mastery[w.fr]=0;srs[w.fr]={};});
+loadProgress();
 
-// Init mastery
-words.forEach(w => mastery[w.fr] = 0);
-
-// ─────────────────────────────────────────────
 // TABS
-// ─────────────────────────────────────────────
-function showTab(name) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-  event.target.classList.add('active');
-  if(name === 'sentences') renderSentences();
-  if(name === 'progress') renderProgress();
+function showTab(name,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='sentences')renderSentences();
+  if(name==='progress')renderProgress();
 }
 
-// ─────────────────────────────────────────────
 // FLASHCARDS
-// ─────────────────────────────────────────────
-function renderCard() {
-  const card = filteredWords[cardIndex];
+function renderCard(){
+  const card=srsMode?srsQueue[cardIndex]:filteredWords[cardIndex];
+  if(!card)return;
   document.getElementById('flashcard').classList.remove('flipped');
-  document.getElementById('fcCategory').textContent = card.cat;
-  document.getElementById('fcCategoryBack').textContent = card.cat;
-  document.getElementById('fcFrench').textContent = card.fr;
-  document.getElementById('fcEnglish').textContent = card.en;
-  document.getElementById('fcPronunciation').textContent = card.ipa;
-  document.getElementById('fcPronunciationBack').textContent = card.ipa;
-  document.getElementById('fcExample').textContent = card.ex;
-  document.getElementById('fcExampleEn').textContent = card.exEn;
-  document.getElementById('fcCounter').textContent = `Card ${cardIndex+1} of ${filteredWords.length}`;
+  ['fcCategory','fcCategoryBack'].forEach(id=>document.getElementById(id).textContent=card.cat);
+  document.getElementById('fcFrench').textContent=card.fr;
+  document.getElementById('fcEnglish').textContent=card.en;
+  document.getElementById('fcPronunciation').textContent=card.ipa;
+  document.getElementById('fcPronunciationBack').textContent=card.ipa;
+  document.getElementById('fcExample').textContent=card.ex;
+  document.getElementById('fcExampleEn').textContent=card.exEn;
+  const total=srsMode?srsQueue.length:filteredWords.length;
+  document.getElementById('fcCounter').textContent='Card '+(cardIndex+1)+' of '+total;
+  const sr=srs[card.fr];
+  document.getElementById('fcSrsInfo').textContent=sr&&sr.nextReview?'Next: '+formatNextReview(sr.nextReview):'';
   updateStats();
 }
-
-function flipCard() {
+function flipCard(){
   document.getElementById('flashcard').classList.toggle('flipped');
-  const card = filteredWords[cardIndex];
-  if(mastery[card.fr] === 0) { mastery[card.fr] = 1; updateStats(); }
+  const card=srsMode?srsQueue[cardIndex]:filteredWords[cardIndex];
+  if(mastery[card.fr]===0){mastery[card.fr]=1;saveProgress();updateStats();}
 }
-
-function nextCard() {
-  cardIndex = (cardIndex + 1) % filteredWords.length;
+function nextCard(){const t=srsMode?srsQueue.length:filteredWords.length;cardIndex=(cardIndex+1)%t;renderCard();}
+function prevCard(){const t=srsMode?srsQueue.length:filteredWords.length;cardIndex=(cardIndex-1+t)%t;renderCard();}
+function markCard(grade){
+  const card=srsMode?srsQueue[cardIndex]:filteredWords[cardIndex];
+  if(grade===0)mastery[card.fr]=Math.max(0,mastery[card.fr]);
+  else if(grade>=2)mastery[card.fr]=Math.min(2,mastery[card.fr]+1);
+  else mastery[card.fr]=Math.max(1,mastery[card.fr]);
+  srs[card.fr]={nextReview:getNextReview(grade),lastGrade:grade,lastReviewed:today()};
+  saveProgress();updateStats();nextCard();
+}
+function shuffleCards(){filteredWords=filteredWords.sort(()=>Math.random()-0.5);cardIndex=0;renderCard();}
+function filterCategory(){
+  const val=document.getElementById('categorySelect').value;
+  filteredWords=val==='all'?[...words]:words.filter(w=>w.cat===val);
+  srsMode=false;document.getElementById('srsModeBar').style.display='none';
+  cardIndex=0;renderCard();
+}
+function startSrsMode(){
+  srsQueue=words.filter(w=>isDue(srs[w.fr])&&mastery[w.fr]>0).sort(()=>Math.random()-0.5);
+  if(srsQueue.length===0){srsQueue=words.filter(w=>mastery[w.fr]===0).slice(0,20);}
+  if(srsQueue.length===0){alert('All caught up! No cards due. 🎉');return;}
+  srsMode=true;cardIndex=0;
+  document.getElementById('srsModeBar').style.display='flex';
+  document.getElementById('srsDueCount').textContent=srsQueue.length;
   renderCard();
 }
-
-function prevCard() {
-  cardIndex = (cardIndex - 1 + filteredWords.length) % filteredWords.length;
-  renderCard();
+function exitSrsMode(){srsMode=false;document.getElementById('srsModeBar').style.display='none';filterCategory();}
+function speakWord(){
+  const card=srsMode?srsQueue[cardIndex]:filteredWords[cardIndex];
+  const u=new SpeechSynthesisUtterance(card.fr);u.lang='fr-FR';u.rate=0.85;speechSynthesis.speak(u);
 }
 
-function markCard(level) {
-  const card = filteredWords[cardIndex];
-  mastery[card.fr] = level;
-  updateStats();
-  nextCard();
-}
-
-function shuffleCards() {
-  filteredWords = filteredWords.sort(() => Math.random() - 0.5);
-  cardIndex = 0;
-  renderCard();
-}
-
-function filterCategory() {
-  const val = document.getElementById('categorySelect').value;
-  filteredWords = val === 'all' ? [...words] : words.filter(w => w.cat === val);
-  cardIndex = 0;
-  renderCard();
-}
-
-function speakWord() {
-  const card = filteredWords[cardIndex];
-  const utter = new SpeechSynthesisUtterance(card.fr);
-  utter.lang = 'fr-FR';
-  utter.rate = 0.85;
-  speechSynthesis.speak(utter);
-}
-
-// ─────────────────────────────────────────────
 // SENTENCES
-// ─────────────────────────────────────────────
-function renderSentences() {
-  const grid = document.getElementById('sentencesGrid');
-  const filtered = currentSentenceFilter === 'all'
-    ? sentences
-    : sentences.filter(s => s.cat === currentSentenceFilter);
-
-  grid.innerHTML = filtered.map(s => `
+function renderSentences(){
+  const filtered=currentSentenceFilter==='all'?sentences:sentences.filter(s=>s.cat===currentSentenceFilter);
+  document.getElementById('sentencesGrid').innerHTML=filtered.map(s=>`
     <div class="sentence-card">
       <div class="sentence-icon">${s.icon}</div>
       <div class="sentence-content">
@@ -1067,168 +589,107 @@ function renderSentences() {
         <div class="sentence-fr">${s.fr}</div>
         <div class="sentence-en">${s.en}</div>
       </div>
-      <button class="sentence-audio" onclick="speakSentence('${s.fr.replace(/'/g, "\\'")}')">🔊</button>
-    </div>
-  `).join('');
+      <button class="sentence-audio" onclick="speakSentence('${s.fr.replace(/'/g,"\\'")}')">🔊</button>
+    </div>`).join('');
 }
-
-function filterSentences(cat, el) {
-  currentSentenceFilter = cat;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  renderSentences();
+function filterSentences(cat,el){
+  currentSentenceFilter=cat;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');renderSentences();
 }
+function speakSentence(text){const u=new SpeechSynthesisUtterance(text);u.lang='fr-FR';u.rate=0.85;speechSynthesis.speak(u);}
 
-function speakSentence(text) {
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'fr-FR';
-  utter.rate = 0.85;
-  speechSynthesis.speak(utter);
-}
-
-// ─────────────────────────────────────────────
 // QUIZ
-// ─────────────────────────────────────────────
-let quizCard = null;
-let quizAnswered = false;
-
-function loadQuizQuestion() {
-  quizAnswered = false;
-  document.getElementById('quizFeedback').textContent = '';
-  document.getElementById('quizFeedback').className = 'quiz-feedback';
-  document.getElementById('nextQuizBtn').style.display = 'none';
-
-  const pool = words;
-  quizCard = pool[Math.floor(Math.random() * pool.length)];
-
-  // Randomly decide direction: fr->en or en->fr
-  const frToEn = Math.random() > 0.4;
-  document.getElementById('quizLabel').textContent = frToEn ? 'What does this mean in English?' : 'How do you say this in French?';
-  document.getElementById('quizWord').textContent = frToEn ? quizCard.fr : quizCard.en;
-  document.getElementById('quizType').textContent = frToEn ? quizCard.ipa : quizCard.cat;
-
-  // Wrong options
-  let wrong = pool.filter(w => w.fr !== quizCard.fr)
-    .sort(() => Math.random() - 0.5).slice(0, 3);
-
-  let options = [quizCard, ...wrong].sort(() => Math.random() - 0.5);
-
-  const container = document.getElementById('quizOptions');
-  container.innerHTML = options.map(opt => {
-    const label = frToEn ? opt.en : opt.fr;
-    const isCorrect = opt.fr === quizCard.fr;
-    return `<button class="quiz-option" onclick="checkAnswer(this, ${isCorrect}, '${quizCard.fr.replace(/'/g,"\\'")}')">${label}</button>`;
+function loadQuizQuestion(){
+  quizAnswered=false;
+  document.getElementById('quizFeedback').textContent='';
+  document.getElementById('quizFeedback').className='quiz-feedback';
+  document.getElementById('nextQuizBtn').style.display='none';
+  quizCard=words[Math.floor(Math.random()*words.length)];
+  const frToEn=Math.random()>0.4;
+  document.getElementById('quizLabel').textContent=frToEn?'What does this mean in English?':'How do you say this in French?';
+  document.getElementById('quizWord').textContent=frToEn?quizCard.fr:quizCard.en;
+  document.getElementById('quizType').textContent=frToEn?quizCard.ipa:quizCard.cat;
+  const wrong=words.filter(w=>w.fr!==quizCard.fr).sort(()=>Math.random()-0.5).slice(0,3);
+  document.getElementById('quizOptions').innerHTML=[quizCard,...wrong].sort(()=>Math.random()-0.5).map(opt=>{
+    const label=frToEn?opt.en:opt.fr;
+    const isCorrect=opt.fr===quizCard.fr;
+    return `<button class="quiz-option" onclick="checkAnswer(this,${isCorrect},'${quizCard.fr.replace(/'/g,"\\'")}')">${label}</button>`;
   }).join('');
 }
-
-function checkAnswer(btn, correct, wordFr) {
-  if(quizAnswered) return;
-  quizAnswered = true;
-
-  const fb = document.getElementById('quizFeedback');
-  if(correct) {
-    btn.classList.add('correct');
-    quizCorrect++;
-    quizStreak++;
-    fb.textContent = '✨ Très bien ! Correct!';
-    fb.className = 'quiz-feedback correct';
-    mastery[wordFr] = Math.min(2, (mastery[wordFr] || 0) + 1);
-  } else {
-    btn.classList.add('wrong');
-    quizWrong++;
-    quizStreak = 0;
-    const correctLabel = document.getElementById('quizLabel').textContent.includes('English') ? words.find(w=>w.fr===wordFr).en : wordFr;
-    fb.textContent = `Non — the answer was: "${correctLabel}"`;
-    fb.className = 'quiz-feedback wrong';
-    // Highlight correct
-    document.querySelectorAll('.quiz-option').forEach(b => {
-      if(b.textContent === correctLabel || b.textContent === words.find(w=>w.fr===wordFr).en || b.textContent === wordFr) {
-        // find by checking
-      }
-    });
+function checkAnswer(btn,correct,wordFr){
+  if(quizAnswered)return;quizAnswered=true;
+  const fb=document.getElementById('quizFeedback');
+  if(correct){
+    btn.classList.add('correct');quizCorrect++;quizStreak++;
+    fb.textContent='✨ Très bien ! Correct!';fb.className='quiz-feedback correct';
+    mastery[wordFr]=Math.min(2,(mastery[wordFr]||0)+1);
+    srs[wordFr]={nextReview:getNextReview(2),lastGrade:2,lastReviewed:today()};
+  }else{
+    btn.classList.add('wrong');quizWrong++;quizStreak=0;
+    const w=words.find(w=>w.fr===wordFr);
+    const ans=document.getElementById('quizLabel').textContent.includes('English')?w.en:w.fr;
+    fb.textContent='Non — the answer was: "'+ans+'"';fb.className='quiz-feedback wrong';
+    srs[wordFr]={nextReview:getNextReview(0),lastGrade:0,lastReviewed:today()};
   }
-
-  // Disable all options
-  document.querySelectorAll('.quiz-option').forEach(b => { b.disabled = true; });
-  document.getElementById('nextQuizBtn').style.display = 'inline-block';
-
-  document.getElementById('qCorrect').textContent = quizCorrect;
-  document.getElementById('qWrong').textContent = quizWrong;
-  document.getElementById('qTotal').textContent = quizCorrect + quizWrong;
-  updateStats();
+  document.querySelectorAll('.quiz-option').forEach(b=>b.disabled=true);
+  document.getElementById('nextQuizBtn').style.display='inline-block';
+  document.getElementById('qCorrect').textContent=quizCorrect;
+  document.getElementById('qWrong').textContent=quizWrong;
+  document.getElementById('qTotal').textContent=quizCorrect+quizWrong;
+  saveProgress();updateStats();
+}
+function resetQuiz(){
+  quizCorrect=0;quizWrong=0;quizStreak=0;
+  ['qCorrect','qWrong','qTotal'].forEach(id=>document.getElementById(id).textContent=0);
+  document.getElementById('quizFeedback').textContent='';
+  document.getElementById('nextQuizBtn').style.display='none';
+  document.getElementById('quizOptions').innerHTML='';
+  document.getElementById('quizWord').textContent='—';
+  saveProgress();updateStats();loadQuizQuestion();
 }
 
-function resetQuiz() {
-  quizCorrect = 0; quizWrong = 0; quizStreak = 0;
-  document.getElementById('qCorrect').textContent = 0;
-  document.getElementById('qWrong').textContent = 0;
-  document.getElementById('qTotal').textContent = 0;
-  document.getElementById('quizFeedback').textContent = '';
-  document.getElementById('nextQuizBtn').style.display = 'none';
-  document.getElementById('quizOptions').innerHTML = '';
-  document.getElementById('quizWord').textContent = '—';
-  document.getElementById('quizLabel').textContent = 'What does this mean in English?';
-  document.getElementById('quizType').textContent = '';
-  updateStats();
-  loadQuizQuestion();
-}
-
-// ─────────────────────────────────────────────
 // PROGRESS
-// ─────────────────────────────────────────────
-function renderProgress() {
-  const mastered = words.filter(w => mastery[w.fr] === 2).length;
-  const learning = words.filter(w => mastery[w.fr] === 1).length;
-  const total = quizCorrect + quizWrong;
-  const acc = total > 0 ? Math.round((quizCorrect/total)*100)+'%' : '—';
-
-  document.getElementById('pMastered').textContent = mastered;
-  document.getElementById('pLearning').textContent = learning;
-  document.getElementById('pAccuracy').textContent = acc;
-  document.getElementById('pStreak').textContent = quizStreak;
-
-  const list = document.getElementById('masteryList');
-  const seen = words.filter(w => mastery[w.fr] > 0).sort((a,b)=> mastery[b.fr]-mastery[a.fr]);
-  if(seen.length === 0) {
-    list.innerHTML = '<div class="word-mastery-item" style="grid-column:1/-1;color:var(--text-light);font-style:italic;">Start flipping flashcards to see your progress here.</div>';
-    return;
-  }
-  list.innerHTML = seen.map(w => {
-    const lvl = mastery[w.fr];
-    const dotClass = `mastery-${lvl}`;
-    const label = lvl === 2 ? 'Mastered' : 'Learning';
-    return `<div class="word-mastery-item">
-      <span style="font-family:'Playfair Display',serif;">${w.fr}</span>
-      <span style="color:var(--text-light)">${w.en}</span>
-      <span><span class="mastery-dot ${dotClass}" title="${label}"></span></span>
-    </div>`;
-  }).join('');
+function renderProgress(){
+  const mastered=words.filter(w=>mastery[w.fr]===2).length;
+  const learning=words.filter(w=>mastery[w.fr]===1).length;
+  const due=words.filter(w=>isDue(srs[w.fr])&&mastery[w.fr]>0).length;
+  const total=quizCorrect+quizWrong;
+  document.getElementById('pMastered').textContent=mastered;
+  document.getElementById('pLearning').textContent=learning;
+  document.getElementById('pDue').textContent=due;
+  document.getElementById('pAccuracy').textContent=total>0?Math.round((quizCorrect/total)*100)+'%':'—';
+  document.getElementById('pStreak').textContent=quizStreak;
+  const seen=words.filter(w=>mastery[w.fr]>0).sort((a,b)=>mastery[b.fr]-mastery[a.fr]);
+  document.getElementById('masteryList').innerHTML=seen.length===0
+    ?'<div class="word-mastery-item" style="grid-column:1/-1;color:var(--text-light);font-style:italic;padding:1rem;">Start flipping flashcards to see your progress here.</div>'
+    :seen.map(w=>{
+      const sr=srs[w.fr];const due=isDue(sr)?'due':'';
+      return `<div class="word-mastery-item">
+        <span style="font-family:'Playfair Display',serif;">${w.fr}</span>
+        <span style="color:var(--text-light);font-size:0.82rem;">${w.en}</span>
+        <span><span class="mastery-dot mastery-${mastery[w.fr]}"></span></span>
+        <span class="next-review ${due}">${sr&&sr.nextReview?formatNextReview(sr.nextReview):'—'}</span>
+      </div>`;
+    }).join('');
+}
+function updateStats(){
+  const mastered=words.filter(w=>mastery[w.fr]===2).length;
+  const learning=words.filter(w=>mastery[w.fr]===1).length;
+  const due=words.filter(w=>isDue(srs[w.fr])&&mastery[w.fr]>0).length;
+  const pct=Math.round((mastered/words.length)*100);
+  const total=quizCorrect+quizWrong;
+  const acc=total>0?Math.round((quizCorrect/total)*100)+'%':'0%';
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('progressPct').textContent=pct+'%';
+  document.getElementById('statMastered').textContent=mastered;
+  document.getElementById('statLearning').textContent=learning;
+  document.getElementById('statDue').textContent=due;
+  document.getElementById('statQuizScore').textContent=acc;
+  document.getElementById('statStreak').textContent=quizStreak;
 }
 
-// ─────────────────────────────────────────────
-// STATS UPDATE
-// ─────────────────────────────────────────────
-function updateStats() {
-  const mastered = words.filter(w => mastery[w.fr] === 2).length;
-  const learning = words.filter(w => mastery[w.fr] === 1).length;
-  const pct = Math.round((mastered / words.length) * 100);
-  const total = quizCorrect + quizWrong;
-  const acc = total > 0 ? Math.round((quizCorrect/total)*100)+'%' : '0%';
-
-  document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = pct + '%';
-  document.getElementById('statMastered').textContent = mastered;
-  document.getElementById('statLearning').textContent = learning;
-  document.getElementById('statQuizScore').textContent = acc;
-  document.getElementById('statStreak').textContent = quizStreak;
-}
-
-// ─────────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────────
-renderCard();
-renderSentences();
-loadQuizQuestion();
+renderCard();renderSentences();loadQuizQuestion();updateStats();
 </script>
 </body>
 </html>
