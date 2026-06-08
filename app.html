@@ -40,11 +40,11 @@
   .flashcard-controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;}
   .category-select{font-family:'Jost',sans-serif;font-size:0.75rem;padding:0.4rem 0.8rem;border:1px solid var(--border);background:var(--ivory);color:var(--navy);border-radius:2px;cursor:pointer;outline:none;}
   .fc-counter{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-light);font-size:0.92rem;}
-  .flashcard-scene{perspective:1000px;cursor:pointer;margin-bottom:1.2rem;min-height:300px;}
-  .flashcard{width:100%;min-height:300px;position:relative;transform-style:preserve-3d;transition:transform 0.55s cubic-bezier(0.4,0,0.2,1);}
-  .flashcard.flipped{transform:rotateY(180deg);}
-  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--border);border-radius:3px;background:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.8rem;box-shadow:0 4px 30px rgba(28,43,74,0.08),inset 0 0 0 6px var(--cream);}
-  .fc-back{transform:rotateY(180deg);background:var(--navy);box-shadow:0 4px 30px rgba(28,43,74,0.2),inset 0 0 0 6px rgba(255,255,255,0.05);}
+  .flashcard-scene{perspective:1000px;-webkit-perspective:1000px;cursor:pointer;margin-bottom:1.2rem;min-height:300px;}
+  .flashcard{width:100%;min-height:300px;position:relative;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform 0.55s cubic-bezier(0.4,0,0.2,1);}
+  .flashcard.flipped{transform:rotateY(180deg);-webkit-transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid var(--border);border-radius:3px;background:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.8rem;box-shadow:0 4px 30px rgba(28,43,74,0.08),inset 0 0 0 6px var(--cream);}
+  .fc-back{transform:rotateY(180deg);-webkit-transform:rotateY(180deg);background:var(--navy);box-shadow:0 4px 30px rgba(28,43,74,0.2),inset 0 0 0 6px rgba(255,255,255,0.05);}
   .fc-hint{position:absolute;top:0.8rem;right:1rem;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light);opacity:0.6;}
   .fc-back .fc-hint{color:rgba(255,255,255,0.4);}
   .fc-srs-info{position:absolute;top:0.8rem;left:1rem;font-size:0.65rem;color:var(--gold);opacity:0.8;}
@@ -1262,28 +1262,87 @@ function selectVerb(i){
   renderVerbCard();checkAchievements();
 }
 function renderVerbCard(){
-  const v=verbs[currentVerbIndex];
-  const tenseHtml=(tenseKey)=>{
-    const t=v[tenseKey];
-    const conjRows=t.forms.map(f=>'<div class="conj-cell"><span class="conj-pronoun">'+f.p+'</span><span class="conj-form">'+f.f+'</span><button class="conj-audio" onclick="speakConj(''+f.f.replace(/'/g,"\'")+'')" title="Listen">🔊</button></div>').join('');
-    return '<div class="tense-panel" id="tense-'+tenseKey+'" style="display:none;"><div class="conj-grid">'+conjRows+'</div><div class="tense-note">'+t.note+'</div></div>';
-  };
-  const examples=v.examples.map(e=>'<div class="verb-example"><div class="verb-example-fr">'+e.fr+'</div><div class="verb-example-en">'+e.en+'</div></div>').join('');
-  document.getElementById('verbDisplay').innerHTML=
-    '<div class="verb-card">'+
-    '<div class="verb-header"><div><span class="verb-title">'+v.fr+'</span>&nbsp;<span class="verb-meaning">'+v.en+'</span></div><span class="verb-type">'+v.type+'</span></div>'+
-    '<div class="verb-tip">💡 '+v.tip+'</div>'+
-    '<div class="tense-tabs">'+
-    '<button class="tense-tab active" onclick="showTense('present',this)">Present<span class="tense-label">je parle</span></button>'+
-    '<button class="tense-tab" onclick="showTense('past',this)">Past<span class="tense-label">j'ai parlé</span></button>'+
-    '<button class="tense-tab" onclick="showTense('future',this)">Future<span class="tense-label">je parlerai</span></button>'+
-    '</div>'+
-    tenseHtml('present')+tenseHtml('past')+tenseHtml('future')+
-    examples+'</div>'+
-    '<div style="display:flex;gap:0.5rem;justify-content:center;margin-top:0.5rem;">'+
-    '<button class="btn btn-outline" onclick="selectVerb('+((currentVerbIndex-1+verbs.length)%verbs.length)+')">← Previous</button>'+
-    '<button class="btn btn-primary" onclick="selectVerb('+((currentVerbIndex+1)%verbs.length)+')">Next →</button></div>';
-  showTense('present',document.querySelector('.tense-tab'));
+  var v=verbs[currentVerbIndex];
+  var prevIdx=(currentVerbIndex-1+verbs.length)%verbs.length;
+  var nextIdx=(currentVerbIndex+1)%verbs.length;
+  var container=document.getElementById('verbDisplay');
+  container.innerHTML='';
+  var card=document.createElement('div');
+  card.className='verb-card';
+  card.innerHTML='<div class="verb-header"><div><span class="verb-title">'+v.fr+'</span>&nbsp;<span class="verb-meaning">'+v.en+'</span></div><span class="verb-type">'+v.type+'</span></div><div class="verb-tip">&#x1F4A1; '+v.tip+'</div>';
+  var tenseTabsDiv=document.createElement('div');
+  tenseTabsDiv.className='tense-tabs';
+  var tenseNames=['present','past','future'];
+  var tenseLabels=['Present','Past','Future'];
+  var tenseSubs=['je parle','pass\u00e9','je parlerai'];
+  for(var ti=0;ti<3;ti++){
+    (function(tKey,tLabel,tSub,isActive){
+      var btn=document.createElement('button');
+      btn.className='tense-tab'+(isActive?' active':'');
+      btn.innerHTML=tLabel+'<span class="tense-label">'+tSub+'</span>';
+      btn.addEventListener('click',function(){showTense(tKey,btn);});
+      tenseTabsDiv.appendChild(btn);
+    })(tenseNames[ti],tenseLabels[ti],tenseSubs[ti],ti===0);
+  }
+  card.appendChild(tenseTabsDiv);
+  for(var pi=0;pi<3;pi++){
+    var t=v[tenseNames[pi]];
+    var panel=document.createElement('div');
+    panel.className='tense-panel';
+    panel.id='tense-'+tenseNames[pi];
+    panel.style.display='none';
+    var grid=document.createElement('div');
+    grid.className='conj-grid';
+    for(var fi=0;fi<t.forms.length;fi++){
+      var f=t.forms[fi];
+      var cell=document.createElement('div');
+      cell.className='conj-cell';
+      var pronoun=document.createElement('span');
+      pronoun.className='conj-pronoun';
+      pronoun.textContent=f.p;
+      var form=document.createElement('span');
+      form.className='conj-form';
+      form.textContent=f.f;
+      var audioBtn=document.createElement('button');
+      audioBtn.className='conj-audio';
+      audioBtn.textContent='\uD83D\uDD0A';
+      audioBtn.title='Listen';
+      (function(formText){
+        audioBtn.addEventListener('click',function(){speakConj(formText);});
+      })(f.f);
+      cell.appendChild(pronoun);
+      cell.appendChild(form);
+      cell.appendChild(audioBtn);
+      grid.appendChild(cell);
+    }
+    var note=document.createElement('div');
+    note.className='tense-note';
+    note.textContent=t.note;
+    panel.appendChild(grid);
+    panel.appendChild(note);
+    card.appendChild(panel);
+  }
+  for(var ei=0;ei<v.examples.length;ei++){
+    var ex=document.createElement('div');
+    ex.className='verb-example';
+    ex.innerHTML='<div class="verb-example-fr">'+v.examples[ei].fr+'</div><div class="verb-example-en">'+v.examples[ei].en+'</div>';
+    card.appendChild(ex);
+  }
+  container.appendChild(card);
+  var nav=document.createElement('div');
+  nav.style.cssText='display:flex;gap:0.5rem;justify-content:center;margin-top:0.5rem;';
+  var prevBtn=document.createElement('button');
+  prevBtn.className='btn btn-outline';
+  prevBtn.textContent='\u2190 Previous';
+  prevBtn.addEventListener('click',function(){selectVerb(prevIdx);});
+  var nextBtn=document.createElement('button');
+  nextBtn.className='btn btn-primary';
+  nextBtn.textContent='Next \u2192';
+  nextBtn.addEventListener('click',function(){selectVerb(nextIdx);});
+  nav.appendChild(prevBtn);
+  nav.appendChild(nextBtn);
+  container.appendChild(nav);
+  showTense('present',tenseTabsDiv.querySelector('.tense-tab'));
 }
 function showTense(tense,btn){
   tensesViewed.add(tense);
@@ -1292,12 +1351,36 @@ function showTense(tense,btn){
   const el=document.getElementById('tense-'+tense);if(el)el.style.display='block';
   if(btn)btn.classList.add('active');checkAchievements();
 }
-function speakConj(form){const u=new SpeechSynthesisUtterance(form);u.lang='fr-FR';u.rate=0.85;speechSynthesis.speak(u);}
+function speakConj(form){var u=new SpeechSynthesisUtterance(form);u.lang='fr-FR';u.rate=0.85;speechSynthesis.speak(u);}
+function speakConjSafe(btn){var form=btn.getAttribute('data-conj');if(form)speakConj(form);}
 
 // SENTENCES
 function renderSentences(){
-  const filtered=currentSentenceFilter==='all'?sentences:sentences.filter(s=>s.cat===currentSentenceFilter);
-  document.getElementById('sentencesGrid').innerHTML=filtered.map(s=>'<div class="sentence-card"><div class="sentence-icon">'+s.icon+'</div><div class="sentence-content"><div class="sentence-situation">'+s.cat+'</div><div class="sentence-fr">'+s.fr+'</div><div class="sentence-en">'+s.en+'</div></div><button class="sentence-audio" onclick="speakSentence(''+s.fr.replace(/'/g,"\'")+'')">🔊</button></div>').join('');
+  var currentFilter=currentSentenceFilter;
+  var filtered=currentFilter==='all'?sentences:sentences.filter(function(s){return s.cat===currentFilter;});
+  var grid=document.getElementById('sentencesGrid');
+  grid.innerHTML='';
+  for(var i=0;i<filtered.length;i++){
+    var s=filtered[i];
+    var card=document.createElement('div');
+    card.className='sentence-card';
+    var icon=document.createElement('div');
+    icon.className='sentence-icon';
+    icon.textContent=s.icon;
+    var body=document.createElement('div');
+    body.className='sentence-content';
+    body.innerHTML='<div class="sentence-situation">'+s.cat+'</div><div class="sentence-fr">'+s.fr+'</div><div class="sentence-en">'+s.en+'</div>';
+    var audioBtn=document.createElement('button');
+    audioBtn.className='sentence-audio';
+    audioBtn.textContent='\uD83D\uDD0A';
+    (function(text){
+      audioBtn.addEventListener('click',function(){speakSentence(text);});
+    })(s.fr);
+    card.appendChild(icon);
+    card.appendChild(body);
+    card.appendChild(audioBtn);
+    grid.appendChild(card);
+  }
 }
 function filterSentences(cat,el){
   currentSentenceFilter=cat;
@@ -1313,15 +1396,24 @@ function loadQuizQuestion(){
   document.getElementById('quizFeedback').className='quiz-feedback';
   document.getElementById('nextQuizBtn').style.display='none';
   quizCard=words[Math.floor(Math.random()*words.length)];
-  const frToEn=Math.random()>0.4;
+  var frToEn=Math.random()>0.4;
   document.getElementById('quizLabel').textContent=frToEn?'What does this mean in English?':'How do you say this in French?';
   document.getElementById('quizWord').textContent=frToEn?quizCard.fr:quizCard.en;
   document.getElementById('quizType').textContent=frToEn?quizCard.ipa:quizCard.cat;
-  const wrong=words.filter(w=>w.fr!==quizCard.fr).sort(()=>Math.random()-0.5).slice(0,3);
-  document.getElementById('quizOptions').innerHTML=[quizCard,...wrong].sort(()=>Math.random()-0.5).map(opt=>{
-    const label=frToEn?opt.en:opt.fr;const isCorrect=opt.fr===quizCard.fr;
-    return '<button class="quiz-option" onclick="checkAnswer(this,'+isCorrect+',''+quizCard.fr.replace(/'/g,"\'")+'')">'+ label+'</button>';
-  }).join('');
+  var wrong=words.filter(function(w){return w.fr!==quizCard.fr;}).sort(function(){return Math.random()-0.5;}).slice(0,3);
+  var options=[quizCard].concat(wrong).sort(function(){return Math.random()-0.5;});
+  var container=document.getElementById('quizOptions');
+  container.innerHTML='';
+  for(var i=0;i<options.length;i++){
+    var opt=options[i];
+    var btn=document.createElement('button');
+    btn.className='quiz-option';
+    btn.textContent=frToEn?opt.en:opt.fr;
+    (function(isCorrect,wordFr){
+      btn.addEventListener('click',function(){checkAnswer(btn,isCorrect,wordFr);});
+    })(opt.fr===quizCard.fr, opt.fr);
+    container.appendChild(btn);
+  }
 }
 function checkAnswer(btn,correct,wordFr){
   if(quizAnswered)return;quizAnswered=true;
@@ -1473,7 +1565,7 @@ function getDailyCandidates(){
   const t=today();
   // Priority 1: due for review and already seen
   const due=words.filter(w=>isDue(srs[w.fr])&&mastery[w.fr]>0)
-    .sort((a,b)=>(srs[a.fr]?.nextReview||'')-(srs[b.fr]?.nextReview||''));
+    .sort((a,b)=>((srs[a.fr]&&srs[a.fr].nextReview)||'')-((srs[b.fr]&&srs[b.fr].nextReview)||''));
   // Priority 2: unseen words
   const unseen=words.filter(w=>mastery[w.fr]===0).sort(()=>Math.random()-0.5);
   // Priority 3: weak words (seen but grade 1)
@@ -1540,7 +1632,7 @@ function showNextCandidate(){
   document.getElementById('dailySelIpa').textContent=card.ipa;
   document.getElementById('dailySelExample').textContent=card.ex;
   document.getElementById('dailySelExampleEn').textContent=card.exEn;
-  const hint=mastery[card.fr]===0?'New word':'Last reviewed: '+formatNextReview(srs[card.fr]?.nextReview);
+  const hint=mastery[card.fr]===0?'New word':'Last reviewed: '+formatNextReview((srs[card.fr]&&srs[card.fr].nextReview));
   document.getElementById('dailySelHint').textContent=hint;
   document.getElementById('dailySubtitle').textContent=
     dailyWords.length+' of 10 chosen · '+dailyKnownCount+' skipped';
